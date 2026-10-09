@@ -1,5 +1,7 @@
 # Google Sheet of waitlist signups
 
+> **Currently in use: the Sheets-connector option** (see the end of this file). The Apps Script option below is an alternative that's real-time and doesn't depend on a Mac being on.
+
 Every signup is copied into a Google Sheet a few seconds after it's submitted, so your team can see the list without access to Neon or Vercel. Neon stays the source of truth. If Google is unavailable, nothing is lost: missed rows are sent with the next signup, and the sheet never gets duplicates.
 
 **Columns:** Signed up (Dubai time) · Name · Phone · Plan · Source · Campaign · Medium · Signup ID
@@ -29,3 +31,10 @@ The next signup pushes every signup so far into the sheet, including earlier one
 - **Changing the script later?** Use *Deploy → Manage deployments → Edit → New version*. That keeps the same URL; a *New deployment* would give you a new one.
 - **Rotating the secret:** delete `SECRET` under *Project Settings → Script properties*, run `setup` again, and update `SHEETS_WEBHOOK_SECRET` in Vercel.
 - If the two env vars aren't set, the site works as normal and just skips the sheet.
+
+## Option B (in use): scheduled Claude task + Google Sheets connector
+
+- **Sheet:** [TruDoc Gold Waitlist — Signups](https://docs.google.com/spreadsheets/d/1DE7xHoGTcL3GgYNkRP9keVBbnBIJDcm0Lm8t2bxzB_Q/edit), tab `Signups`
+- **Schedule:** the Claude task `trudoc-waitlist-to-sheet` runs hourly (Claude app → Scheduled). It only runs while the Mac and the Claude app are on; missed runs catch up on the next one.
+- **How it works:** the task runs `npm run -s sheet-sync -- pending`, which calls the site's private `/api/sheet-sync` endpoint using `SHEET_SYNC_TOKEN` from `.env.local` (the same token is set in Vercel). It writes the rows below the last used row with the Sheets connector, then runs `npm run -s sheet-sync -- mark <ids>`. Signup IDs already in column H are skipped, so the sheet never gets duplicates.
+- **Writing rows by hand?** Write below the last row, and don't use "insert row" above the header. New rows keep the column formats (the date column and plain-text phone numbers).
