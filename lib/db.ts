@@ -1,4 +1,5 @@
 import { neon } from '@neondatabase/serverless';
+import { SCHEMA_STATEMENTS } from './schema';
 import type { Plan } from './validation';
 
 // Server-only. Every write goes through /api/waitlist; the client never sees credentials.
@@ -22,8 +23,18 @@ export interface WaitlistDb {
 
 function neonDb(url: string): WaitlistDb {
   const sql = neon(url);
+  // Create tables on the first query after a cold start (idempotent), so a fresh database needs no manual step.
+  let ready: Promise<void> | null = null;
+  const ensureSchema = () =>
+    (ready ??= (async () => {
+      for (const stmt of SCHEMA_STATEMENTS) await sql.query(stmt);
+    })().catch((err) => {
+      ready = null; // retry on the next request
+      throw err;
+    }));
   return {
     async insertSignup(r) {
+      await ensureSchema();
       const rows = await sql`
         insert into waitlist_signups (name, phone_e164, plan, source, utm, user_agent, ip_hash)
         values (${r.name}, ${r.phoneE164}, ${r.plan}, ${r.source}, ${r.utm ? JSON.stringify(r.utm) : null}::jsonb, ${r.userAgent}, ${r.ipHash})
@@ -32,6 +43,7 @@ function neonDb(url: string): WaitlistDb {
       return { duplicate: rows.length === 0 };
     },
     async hit(key, windowMs) {
+      await ensureSchema();
       const windowStart = new Date(Math.floor(Date.now() / windowMs) * windowMs);
       const rows = await sql`
         insert into waitlist_rate_limits (key, window_start, hits)

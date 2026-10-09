@@ -1,8 +1,8 @@
-// Applies db/migrations/*.sql in order against DATABASE_URL.
-// Usage: DATABASE_URL=postgres://... npm run db:migrate
-import { readdirSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
+// Applies lib/schema.ts against DATABASE_URL. The app also does this itself on a cold start,
+// so this is only needed to prepare a database ahead of time.
+// Usage: DATABASE_URL=postgres://... npm run db:migrate   (Node 22.18+/24 for .ts type stripping)
 import { neon } from '@neondatabase/serverless';
+import { SCHEMA_STATEMENTS } from '../lib/schema.ts';
 
 const url = process.env.DATABASE_URL;
 if (!url) {
@@ -10,13 +10,5 @@ if (!url) {
   process.exit(1);
 }
 const sql = neon(url);
-const dir = join(import.meta.dirname, '..', 'db', 'migrations');
-
-for (const file of readdirSync(dir).filter((f) => f.endsWith('.sql')).sort()) {
-  const statements = readFileSync(join(dir, file), 'utf8')
-    .split(/;\s*$/m)
-    .map((s) => s.replace(/^\s*--.*$/gm, '').trim())
-    .filter(Boolean);
-  for (const s of statements) await sql.query(s);
-  console.log(`applied ${file} (${statements.length} statements)`);
-}
+for (const s of SCHEMA_STATEMENTS) await sql.query(s);
+console.log(`applied ${SCHEMA_STATEMENTS.length} statements`);

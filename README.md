@@ -34,13 +34,13 @@ No credentials ever reach the client. All writes go through `POST /api/waitlist`
 
 ## Database
 
-The schema lives in [`db/migrations/001_waitlist.sql`](db/migrations/001_waitlist.sql). It contains `waitlist_signups` (unique on `phone_e164`) and `waitlist_rate_limits`. Run it with:
+The schema lives in [`lib/schema.ts`](lib/schema.ts). It contains `waitlist_signups` (unique on `phone_e164`) and `waitlist_rate_limits`, and every statement is idempotent. **The app applies it automatically** on the first database query after a cold start, so a new Neon database needs no manual step.
+
+To prepare a database ahead of time:
 
 ```bash
 DATABASE_URL=postgres://… npm run db:migrate
 ```
-
-The migrations are idempotent (`create … if not exists`), so re-running them is safe.
 
 ## API — `POST /api/waitlist`
 
@@ -90,8 +90,8 @@ First run only: `npx playwright install chromium`.
 
 ## Deploy (Vercel)
 
-1. Create a Neon project and copy the **pooled** connection string. You can also add it through the Vercel ↔ Neon integration, which sets `DATABASE_URL` for you.
-2. Run the migration once: `DATABASE_URL=… npm run db:migrate`.
+1. Add Neon through the Vercel ↔ Neon integration (Storage → Neon). It sets `DATABASE_URL` for you. The tables are created automatically on the first request.
+2. Set `IP_HASH_SALT`, for example: `openssl rand -hex 32 | npx vercel env add IP_HASH_SALT production --sensitive`.
 3. Import the repo in Vercel. Set `DATABASE_URL`, `IP_HASH_SALT` and `NEXT_PUBLIC_SITE_URL` for Production and Preview.
 4. Deploy. No other config is needed: the API route runs on the Node runtime by default, and the landing is statically prerendered.
 
