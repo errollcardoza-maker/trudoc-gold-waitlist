@@ -14,11 +14,24 @@ export type SignupRow = {
   ipHash: string | null;
 };
 
+/** A stored signup, as sent to the Google Sheet. */
+export type StoredSignup = {
+  id: string;
+  createdAt: string; // ISO 8601
+  name: string;
+  phoneE164: string;
+  plan: Plan;
+  utm: Record<string, string> | null;
+};
+
 export interface WaitlistDb {
   /** Inserts a signup. A phone number that already exists is a no-op and returns `duplicate: true`. */
   insertSignup(row: SignupRow): Promise<{ duplicate: boolean }>;
   /** Fixed-window counter. Returns the hit count for `key` in the current window, including this hit. */
   hit(key: string, windowMs: number): Promise<number>;
+  /** Oldest signups not yet appended to the Google Sheet. */
+  unsyncedSignups(limit: number): Promise<StoredSignup[]>;
+  markSynced(ids: string[]): Promise<void>;
 }
 
 function neonDb(url: string): WaitlistDb {
@@ -54,18 +67,57 @@ function neonDb(url: string): WaitlistDb {
       if (Math.random() < 0.01) await sql`delete from waitlist_rate_limits where window_start < now() - interval '1 day'`;
       return Number(rows[0].hits);
     },
+    async unsyncedSignups(limit) {
+      await ensureSchema();
+      const rows = await sql`
+        select id, created_at, name, phone_e164, plan, utm
+        from waitlist_signups
+        where sheet_synced_at is null
+        order by created_at
+        limit ${limit}`;
+      return rows.map((r) => ({
+        id: String(r.id),
+        createdAt: new Date(r.created_at).toISOString(),
+        name: r.name,
+        phoneE164: r.phone_e164,
+        plan: r.plan,
+        utm: r.utm ?? null,
+      }));
+    },
+    async markSynced(ids) {
+      if (!ids.length) return;
+      await sql`update waitlist_signups set sheet_synced_at = now() where id = any(${ids}::uuid[])`;
+    },
   };
 }
 
 // In-memory store for local development and the Playwright suite (WAITLIST_DB=memory).
 function memoryDb(): WaitlistDb {
-  const g = globalThis as unknown as { __tdgMem?: { phones: Map<string, SignupRow>; hits: Map<string, number> } };
+  type MemRow = StoredSignup & { synced: boolean };
+  const g = globalThis as unknown as { __tdgMem?: { phones: Map<string, MemRow>; hits: Map<string, number> } };
   const mem = (g.__tdgMem ??= { phones: new Map(), hits: new Map() });
   return {
     async insertSignup(r) {
       if (mem.phones.has(r.phoneE164)) return { duplicate: true };
-      mem.phones.set(r.phoneE164, r);
+      mem.phones.set(r.phoneE164, {
+        id: crypto.randomUUID(),
+        createdAt: new Date().toISOString(),
+        name: r.name,
+        phoneE164: r.phoneE164,
+        plan: r.plan,
+        utm: r.utm,
+        synced: false,
+      });
       return { duplicate: false };
+    },
+    async unsyncedSignups(limit) {
+      return [...mem.phones.values()]
+        .filter((r) => !r.synced)
+        .slice(0, limit)
+        .map((r) => ({ id: r.id, createdAt: r.createdAt, name: r.name, phoneE164: r.phoneE164, plan: r.plan, utm: r.utm }));
+    },
+    async markSynced(ids) {
+      for (const r of mem.phones.values()) if (ids.includes(r.id)) r.synced = true;
     },
     async hit(key, windowMs) {
       const k = `${key}:${Math.floor(Date.now() / windowMs)}`;

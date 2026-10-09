@@ -28,6 +28,8 @@ npm run dev
 | `DATABASE_URL` | prod | Neon pooled connection string |
 | `IP_HASH_SALT` | prod | Secret salt; IPs are stored only as `sha256(ip + salt)`. Generate with `openssl rand -hex 32` |
 | `NEXT_PUBLIC_SITE_URL` | recommended | Absolute base URL for meta/OG tags |
+| `SHEETS_WEBHOOK_URL` | optional | Apps Script web app URL; copies every signup into a Google Sheet ([setup](integrations/google-sheet/README.md)) |
+| `SHEETS_WEBHOOK_SECRET` | optional | Shared secret printed by the script's `setup` |
 | `WAITLIST_DB` | dev/test | `memory` to use the in-memory store |
 
 No credentials ever reach the client. All writes go through `POST /api/waitlist`.
@@ -65,7 +67,7 @@ The client applies a 10s timeout and shows the inline error on any non-2xx respo
 npm run test:e2e        # builds, starts on :3200 with WAITLIST_DB=memory, runs Playwright
 ```
 
-The suite has 69 tests. Mobile coverage:
+The suite has 76 tests. Mobile coverage:
 - the biomarker accordion (single-open, Heart open by default) and the FAQ (index 3 open by default)
 - every validation message, focus on the first invalid field, and blur-only errors
 - phone normalisation, as unit tests and through the UI
@@ -77,6 +79,8 @@ The suite has 69 tests. Mobile coverage:
 - no horizontal overflow at 320–480px
 - the API's validation, honeypot, timing check and rate limit
 - a visual snapshot guarding the mobile layout (`tests/landing.spec.ts-snapshots/`); after an intentional mobile change, refresh it with `npx playwright test -g snapshot --update-snapshots`
+
+Google Sheet sync (`tests/sheets.spec.ts`): formatting, retry after failure, batching, and `Code.gs` itself, run against a fake spreadsheet (de-duplication, phone kept as text, formula neutralising, secret check).
 
 Desktop coverage (`tests/desktop.spec.ts`, 1440px):
 - opening the modal (FLIP from the CTA), and closing it via ×, backdrop, Esc and browser Back
@@ -112,10 +116,12 @@ components/
   Success.tsx
   landing/*             TopBar, Hero, HowItWorks, Biomarkers, Conditions, Doctors, Pricing, Faq, Footer, StickyCta/FloatingCta
                         (responsive classes; Hero, Conditions and Footer have separate mobile/desktop subtrees)
+integrations/google-sheet/  Apps Script + setup guide for the signups Google Sheet
 lib/
   content.ts            every copy string and data list from the prototype
   validation.ts         shared client/server rules + zod schema
   db.ts                 WaitlistDb interface: Neon + in-memory implementations
+  sheets.ts             syncs unsynced signups to the Google Sheet after each request
 lib/schema.ts           DB schema (auto-applied)
 tests/                  Playwright
 ```

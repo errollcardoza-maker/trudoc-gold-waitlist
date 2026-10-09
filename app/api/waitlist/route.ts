@@ -1,5 +1,7 @@
 import { createHash } from 'node:crypto';
+import { after } from 'next/server';
 import { getDb } from '@/lib/db';
+import { sheetsConfig, syncToSheet } from '@/lib/sheets';
 import { waitlistSchema } from '@/lib/validation';
 
 const RATE_WINDOW_MS = 10 * 60 * 1000;
@@ -62,6 +64,15 @@ export async function POST(req: Request) {
       userAgent: req.headers.get('user-agent')?.slice(0, 512) ?? null,
       ipHash,
     });
+
+    // Copy to the Google Sheet after responding, so the visitor never waits on Google.
+    // Runs for duplicates too, which retries anything a previous sync missed.
+    const sheets = sheetsConfig();
+    if (sheets) {
+      after(() =>
+        syncToSheet(db, sheets).catch((err) => console.error('[waitlist] sheet sync', err)),
+      );
+    }
     return json(duplicate ? { ok: true, duplicate: true } : { ok: true });
   } catch (err) {
     console.error('[waitlist]', err);

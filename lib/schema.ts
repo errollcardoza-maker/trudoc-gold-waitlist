@@ -16,6 +16,9 @@ export const SCHEMA_STATEMENTS: string[] = [
     created_at timestamptz not null default now()
   )`,
   `create unique index if not exists waitlist_phone_unique on waitlist_signups (phone_e164)`,
+  // Google Sheet sync (lib/sheets.ts): null until the row has been appended to the sheet.
+  `alter table waitlist_signups add column if not exists sheet_synced_at timestamptz`,
+  `create index if not exists waitlist_unsynced on waitlist_signups (created_at) where sheet_synced_at is null`,
 
   // Fixed-window rate limit counters for POST /api/waitlist (5 requests / 10 min per IP hash).
   `create table if not exists waitlist_rate_limits (
