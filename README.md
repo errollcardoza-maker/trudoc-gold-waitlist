@@ -116,6 +116,6 @@ lib/
   content.ts            every copy string and data list from the prototype
   validation.ts         shared client/server rules + zod schema
   db.ts                 WaitlistDb interface: Neon + in-memory implementations
-db/migrations/          SQL
+lib/schema.ts           DB schema (auto-applied)
 tests/                  Playwright
 ```
