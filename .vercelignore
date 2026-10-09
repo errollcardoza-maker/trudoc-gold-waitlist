@@ -1,0 +1,6 @@
+.env*
+!.env.example
+.claude
+test-results
+playwright-report
+tests/*-snapshots
