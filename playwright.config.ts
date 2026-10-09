@@ -23,6 +23,6 @@ export default defineConfig({
     url: `http://localhost:${PORT}`,
     timeout: 180_000,
     reuseExistingServer: !process.env.CI,
-    env: { WAITLIST_DB: 'memory' },
+    env: { WAITLIST_DB: 'memory', SHEET_SYNC_TOKEN: 'test-sheet-token', SHEETS_WEBHOOK_URL: '', SHEETS_WEBHOOK_SECRET: '' },
   },
 });

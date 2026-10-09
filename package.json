@@ -9,7 +9,8 @@
     "lint": "eslint",
     "db:migrate": "node scripts/migrate.mjs",
     "test:e2e": "playwright test",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "sheet-sync": "node --env-file-if-exists=.env.local scripts/sheet-sync.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.2.0",

@@ -1,4 +1,4 @@
-import type { WaitlistDb } from './db';
+import type { StoredSignup, WaitlistDb } from './db';
 import { formatPhoneDisplay } from './validation';
 
 // Sends signups to a Google Sheet through the Apps Script web app in integrations/google-sheet/Code.gs.
@@ -21,6 +21,19 @@ type Config = { url: string; secret: string; fetchImpl?: typeof fetch; batch?: n
 
 const PLAN_LABEL: Record<string, string> = { individual: 'Individual', family: 'Family' };
 
+export function toSheetRow(s: StoredSignup): SheetRow {
+  return {
+    id: s.id,
+    createdAt: s.createdAt,
+    name: s.name,
+    phone: formatPhoneDisplay(s.phoneE164),
+    plan: PLAN_LABEL[s.plan] ?? s.plan,
+    source: s.utm?.utm_source ?? '',
+    campaign: s.utm?.utm_campaign ?? '',
+    medium: s.utm?.utm_medium ?? '',
+  };
+}
+
 export function sheetsConfig(): Config | null {
   const url = process.env.SHEETS_WEBHOOK_URL;
   const secret = process.env.SHEETS_WEBHOOK_SECRET;
@@ -34,16 +47,7 @@ export async function syncToSheet(db: WaitlistDb, { url, secret, fetchImpl = fet
     const pending = await db.unsyncedSignups(batch);
     if (!pending.length) break;
 
-    const rows: SheetRow[] = pending.map((s) => ({
-      id: s.id,
-      createdAt: s.createdAt,
-      name: s.name,
-      phone: formatPhoneDisplay(s.phoneE164),
-      plan: PLAN_LABEL[s.plan] ?? s.plan,
-      source: s.utm?.utm_source ?? '',
-      campaign: s.utm?.utm_campaign ?? '',
-      medium: s.utm?.utm_medium ?? '',
-    }));
+    const rows = pending.map(toSheetRow);
 
     const res = await fetchImpl(url, {
       method: 'POST',
@@ -60,4 +64,36 @@ export async function syncToSheet(db: WaitlistDb, { url, secret, fetchImpl = fet
     if (pending.length < batch) break;
   }
   return total;
+}
+
+/* ---------- Sheets-connector sync (scheduled Claude task, see scripts/sheet-sync.mjs) ---------- */
+
+/** "2026-10-09 15:42" in Dubai time; the sheet parses it into a date cell. */
+export function dubaiTime(iso: string): string {
+  const p = Object.fromEntries(
+    new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'Asia/Dubai', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23',
+    })
+      .formatToParts(new Date(iso))
+      .map((x) => [x.type, x.value]),
+  );
+  return `${p.year}-${p.month}-${p.day} ${p.hour}:${p.minute}`;
+}
+
+/** The connector writes values as if typed, so "+971 …" or "=…" would become formulas. A leading
+ *  apostrophe keeps them as plain text (and isn't shown). */
+export const asText = (v: string) => (/^[=+\-@']/.test(v) ? `'${v}` : v);
+
+/** One sheet row in column order: Signed up · Name · Phone · Plan · Source · Campaign · Medium · Signup ID. */
+export function sheetCells(r: SheetRow): string[] {
+  return [
+    dubaiTime(r.createdAt),
+    asText(r.name),
+    asText(r.phone),
+    asText(r.plan),
+    asText(r.source),
+    asText(r.campaign),
+    asText(r.medium),
+    r.id,
+  ];
 }

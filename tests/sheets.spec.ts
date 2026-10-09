@@ -140,3 +140,38 @@ test.describe('Apps Script (Code.gs)', () => {
     expect(grid).toHaveLength(0);
   });
 });
+
+test.describe('sheet cells (connector sync)', () => {
+  test('formats date in Dubai time and keeps phone/formula-like values as text', async () => {
+    const { sheetCells } = await import('../lib/sheets');
+    expect(
+      sheetCells({ id: 'x', createdAt: '2026-10-09T10:05:00.000Z', name: 'Sara', phone: '+971 50 123 4567', plan: 'Family', source: '=cmd', campaign: '', medium: '@m' }),
+    ).toEqual(['2026-10-09 14:05', 'Sara', "'+971 50 123 4567", 'Family', "'=cmd", '', "'@m", 'x']);
+  });
+});
+
+test.describe('/api/sheet-sync', () => {
+  const auth = { authorization: 'Bearer test-sheet-token' };
+
+  test('rejects a missing or wrong token', async ({ request }) => {
+    expect((await request.get('/api/sheet-sync')).status()).toBe(401);
+    expect((await request.get('/api/sheet-sync', { headers: { authorization: 'Bearer nope' } })).status()).toBe(401);
+  });
+
+  test('lists unsynced signups as sheet rows, and marking removes them', async ({ request }) => {
+    const phone = `05${Math.floor(Math.random() * 1e8).toString().padStart(8, '0')}`;
+    const ip = { 'x-forwarded-for': `10.9.${Math.floor(Math.random() * 250)}.${Math.floor(Math.random() * 250)}` };
+    await request.post('/api/waitlist', { data: { name: 'Lina Sync', phone, plan: 'family', t: 5000 }, headers: ip });
+
+    const list = await (await request.get('/api/sheet-sync', { headers: auth })).json();
+    const row = list.rows.find((r: { cells: string[] }) => r.cells[1] === 'Lina Sync');
+    expect(row.cells[2]).toMatch(/^'\+971 5\d \d{3} \d{4}$/);
+    expect(row.cells[3]).toBe('Family');
+    expect(row.cells[0]).toMatch(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/);
+
+    const marked = await request.post('/api/sheet-sync', { headers: auth, data: { ids: [row.id] } });
+    expect(await marked.json()).toEqual({ ok: true, marked: 1 });
+    const after = await (await request.get('/api/sheet-sync', { headers: auth })).json();
+    expect(after.rows.some((r: { id: string }) => r.id === row.id)).toBe(false);
+  });
+});
