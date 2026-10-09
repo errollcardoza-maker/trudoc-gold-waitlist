@@ -4,12 +4,14 @@
 
 Every signup is copied into a Google Sheet a few seconds after it's submitted, so your team can see the list without access to Neon or Vercel. Neon stays the source of truth. If Google is unavailable, nothing is lost: missed rows are sent with the next signup, and the sheet never gets duplicates.
 
+**Email alert:** each time new rows are added, the script emails `ALERT_EMAIL` (set at the top of `Code.gs`) with the count and a link to the sheet. The email is sent from the Google account that owns the script, and contains no names or phone numbers.
+
 **Columns:** Signed up (Dubai time) · Name · Phone · Plan · Source · Campaign · Medium · Signup ID
 
 ## One-time setup (about 5 minutes)
 
 1. **Create the sheet.** Go to [sheets.new](https://sheets.new) and name it something like *TruDoc Gold Waitlist*.
-2. **Add the script.** In the sheet, open **Extensions → Apps Script**. Delete what's there, paste the whole of [`Code.gs`](Code.gs), and save.
+2. **Add the script.** In the sheet (the existing *TruDoc Gold Waitlist — Signups* works as-is), open **Extensions → Apps Script**. Delete what's there, paste the whole of [`Code.gs`](Code.gs), and save.
 3. **Run setup.** In the toolbar's function dropdown, pick **`setup`** and click **Run**. Approve the permissions; Google warns because the script is yours and unverified, so choose *Advanced → Go to project*. Then open **View → Logs** (or *Execution log*) and copy the **secret** it printed.
 4. **Publish it.** Click **Deploy → New deployment**, choose the type **Web app**, and set:
    - *Execute as:* **Me**

@@ -10,6 +10,8 @@
  */
 
 const SHEET_NAME = 'Signups';
+/** Who gets the "N new leads" email. Leave empty ('') to turn alerts off. */
+const ALERT_EMAIL = 'ykonduru@trudochealth.com';
 const HEADERS = ['Signed up (Dubai time)', 'Name', 'Phone', 'Plan', 'Source', 'Campaign', 'Medium', 'Signup ID'];
 
 /** Run once from the editor: creates the tab and header row, and the shared secret. */
@@ -67,10 +69,30 @@ function doPost(e) {
       const range = sheet.getRange(last + 1, 1, rows.length, HEADERS.length);
       range.setValues(rows);
       sheet.getRange(last + 1, 1, rows.length, 1).setNumberFormat('yyyy-mm-dd hh:mm');
+      notify_(rows.length, last - 1 + rows.length);
     }
     return json_({ ok: true, appended: rows.length });
   } finally {
     lock.releaseLock();
+  }
+}
+
+/** One alert email per batch of new rows. Never fails the request: the rows are already saved. */
+function notify_(added, total) {
+  if (!ALERT_EMAIL) return;
+  try {
+    const url = SpreadsheetApp.getActiveSpreadsheet().getUrl();
+    MailApp.sendEmail({
+      to: ALERT_EMAIL,
+      subject: 'TruDoc Gold waitlist: ' + added + ' new lead' + (added === 1 ? '' : 's'),
+      body:
+        added + ' new lead' + (added === 1 ? '' : 's') + ' joined the TruDoc Gold waitlist and ' +
+        (added === 1 ? 'was' : 'were') + ' added to the sheet.\n\n' +
+        'Open the sheet: ' + url + '\n\n' +
+        'Total leads in the sheet: ' + total + '\n',
+    });
+  } catch (err) {
+    console.error('alert email failed: ' + err);
   }
 }
 

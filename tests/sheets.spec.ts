@@ -99,6 +99,7 @@ function loadAppsScript(secret = 'shh') {
   });
   const sheet = { getLastRow: () => grid.length, getRange: range, setFrozenRows() {} };
   const props: Record<string, string> = { SECRET: secret };
+  const mails: { to: string; subject: string; body: string }[] = [];
   const ctx = vm.createContext({
     SpreadsheetApp: { getActiveSpreadsheet: () => ({ getSheetByName: () => sheet, insertSheet: () => sheet, setSpreadsheetTimeZone() {} }) },
     PropertiesService: { getScriptProperties: () => ({ getProperty: (k: string) => props[k] ?? null, setProperty: (k: string, v: string) => (props[k] = v) }) },
@@ -106,10 +107,12 @@ function loadAppsScript(secret = 'shh') {
     ContentService: { createTextOutput: (s: string) => ({ setMimeType: () => JSON.parse(s) }), MimeType: { JSON: 'json' } },
     Utilities: { getUuid: () => '00000000-0000-0000-0000-000000000000' },
     Logger: { log() {} },
+    MailApp: { sendEmail: (m: { to: string; subject: string; body: string }) => mails.push(m) },
+    console: { error() {} },
   });
   vm.runInContext(readFileSync(join(__dirname, '../integrations/google-sheet/Code.gs'), 'utf8'), ctx);
   const post = (body: unknown) => (ctx.doPost as (e: unknown) => { ok: boolean; appended?: number; error?: string })({ postData: { contents: JSON.stringify(body) } });
-  return { ctx, grid, post };
+  return { ctx, grid, post, mails };
 }
 
 test.describe('Apps Script (Code.gs)', () => {
@@ -132,6 +135,28 @@ test.describe('Apps Script (Code.gs)', () => {
     // Retried batch with one known and one new row: only the new one is added.
     expect(post({ secret: 'shh', rows: [row, { ...row, id: 'a2', name: 'Omar' }] })).toEqual({ ok: true, appended: 1 });
     expect(grid).toHaveLength(3);
+  });
+
+  test('emails one alert per batch of new rows, none when nothing new', () => {
+    const { ctx, post, mails } = loadAppsScript();
+    (ctx.setup as () => void)();
+    // getUrl is needed for the email body
+    (ctx.SpreadsheetApp as { getActiveSpreadsheet: () => Record<string, unknown> }).getActiveSpreadsheet = (() => {
+      const orig = (ctx.SpreadsheetApp as { getActiveSpreadsheet: () => Record<string, unknown> }).getActiveSpreadsheet;
+      return () => ({ ...orig(), getUrl: () => 'https://docs.google.com/spreadsheets/d/X/edit' });
+    })();
+    post({ secret: 'shh', rows: [row, { ...row, id: 'a2' }] });
+    expect(mails).toHaveLength(1);
+    expect(mails[0].to).toBe('ykonduru@trudochealth.com');
+    expect(mails[0].subject).toBe('TruDoc Gold waitlist: 2 new leads');
+    expect(mails[0].body).toContain('Open the sheet: https://docs.google.com/spreadsheets/d/X/edit');
+    expect(mails[0].body).toContain('Total leads in the sheet: 2');
+    expect(mails[0].body).not.toContain('Sara'); // no personal details
+
+    post({ secret: 'shh', rows: [row] }); // already present → no email
+    expect(mails).toHaveLength(1);
+    post({ secret: 'shh', rows: [{ ...row, id: 'a3' }] });
+    expect(mails[1].subject).toBe('TruDoc Gold waitlist: 1 new lead');
   });
 
   test('rejects a wrong secret', () => {
