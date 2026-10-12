@@ -13,7 +13,6 @@
   --color-focus: rgb(46, 144, 250);
 
   /* Web prototype collapse points (rem so they sort with md = 48rem; 1000 / 1001 / 1101px). */
-  --breakpoint-quad: 62.5rem;   /* conditions 4 columns */
   --breakpoint-duo: 62.5625rem; /* hero two columns */
   --breakpoint-split: 68.8125rem; /* biomarkers/FAQ 5fr/7fr split, sticky heading */
 }

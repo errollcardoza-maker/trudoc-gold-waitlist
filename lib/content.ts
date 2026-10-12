@@ -94,17 +94,22 @@ export const areas: HealthArea[] = [
   ] },
 ];
 
+// Health flags and the biomarkers used to track them. These support risk assessment; they don't
+// independently confirm a condition (e.g. liver enzymes alone can't diagnose fatty liver).
+// \u2060 (word joiner) keeps hyphenated biomarker names like hs-CRP on one line.
 export const conditionsA = [
-  { title: 'Heart disease', desc: 'Tracked through LDL, ApoB, Lipoprotein(a) and hs-CRP' },
-  { title: 'Type 2 diabetes', desc: 'Tracked through fasting glucose, HbA1c and fasting insulin' },
-  { title: 'Fatty liver', desc: 'Tracked through ALT, AST, GGT and triglycerides' },
-  { title: 'Kidney disease', desc: 'Tracked through creatinine, eGFR, urea and uACR' },
+  { title: 'Cardiovascular risk', desc: 'Tracked through total cholesterol, LDL, HDL, non-\u2060HDL, triglycerides, ApoB, Lipoprotein(a), hs-\u2060CRP and homocysteine' },
+  { title: 'Type 2 diabetes risk', desc: 'Tracked through fasting glucose, HbA1c and fasting insulin' },
+  { title: 'Fatty liver risk', desc: 'Tracked through ALT, AST, GGT and ALP' },
+  { title: 'Chronic kidney disease risk', desc: 'Tracked through creatinine, eGFR, urea (BUN) and urine albumin:creatinine (uACR)' },
+  { title: 'Thyroid disorders', desc: 'Tracked through TSH, Free T4, Free T3 and TPO antibodies' },
 ];
 export const conditionsB = [
-  { title: 'Thyroid disorders', desc: 'Tracked through TSH, Free T4, Free T3 and TPO antibodies' },
-  { title: 'Gout', desc: 'Tracked through uric acid levels' },
-  { title: 'Anaemia', desc: 'Tracked through hemoglobin, ferritin, iron and vitamin B12' },
-  { title: 'Low testosterone', desc: 'Tracked through total testosterone and SHBG' },
+  { title: 'Inflammation', desc: 'Tracked through hs-\u2060CRP, ESR and WBC with differential' },
+  { title: 'Anaemia and iron deficiency', desc: 'Tracked through haemoglobin, haematocrit, full blood count, ferritin, iron and transferrin saturation' },
+  { title: 'Vitamin deficiencies', desc: 'Tracked through vitamin D, vitamin B12 and folate' },
+  { title: 'Hormonal imbalances', desc: 'Tracked through total testosterone, SHBG, DHEA-\u2060S and morning cortisol' },
+  { title: 'Electrolyte imbalances', desc: 'Tracked through sodium, potassium, calcium, magnesium and phosphorus' },
 ];
 
 export const doctors = [

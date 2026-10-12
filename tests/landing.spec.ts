@@ -88,7 +88,8 @@ test('Oct 12 change set: copy, phone, removed items', async ({ page }) => {
   // Hero feature #2, How it works step 2, conditions and doctors copy
   await expect(page.getByText('A doctor and specialist by your side, always').first()).toBeAttached();
   await expect(page.getByText('A doctor by your side, always', { exact: true })).toBeAttached();
-  for (const t of ['Gout', 'Anaemia', 'Low testosterone']) await expect(page.getByText(t, { exact: true }).first()).toBeAttached();
+  for (const t of ['Cardiovascular risk', 'Anaemia and iron deficiency', 'Electrolyte imbalances']) await expect(page.getByText(t, { exact: true }).first()).toBeAttached();
+  await expect(page.getByTestId('conditions-scroller').getByText(/^Tracked through/)).toHaveCount(10);
   await expect(page.getByText('4.5 Rating').first()).toBeAttached();
   await expect(page.getByText('GP certified, DOH licensed')).toBeAttached();
   await expect(page.getByText('Personalised guidance for your health needs')).toBeAttached();

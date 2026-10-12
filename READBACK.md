@@ -80,7 +80,7 @@ All 14 items are applied on mobile and web. The updated prototypes match at 375/
 | C2 | Biomarker indent (§4) | Already removed in the previous release, at your request. |
 | C3 | "Nutrionist" | Kept as written, pending product confirmation (brief note). |
 | C4 | Hero art | `human.png`, `tabby.png` and `tamara.png` are deleted. The test tube preloads on mobile; on desktop it loads eagerly in view. |
-| C5 | Conditions at 768–999px | Still 2 columns (W2). The new copy fits without clipping, and cards grow with their text. |
+| C5 | Conditions (updated 12 Oct) | 10 health flags with their tracking biomarkers, supplied by product. Mobile shows two scrolling rows of 5; desktop shows 5 × 2 from 1101px and 2 columns below. Hyphenated biomarker names (hs-CRP, non-HDL, DHEA-S) don't break across lines. |
 
 ## Open questions for you
 

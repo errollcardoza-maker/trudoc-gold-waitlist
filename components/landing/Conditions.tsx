@@ -21,7 +21,7 @@ function DesktopCard({ title, desc }: { title: string; desc: string }) {
   return (
     <div className="relative flex min-h-[168px] flex-col gap-2 overflow-hidden rounded-2xl bg-[rgb(30,22,10)] p-5">
       <div className="absolute -inset-x-2.5 -inset-y-10">
-        <Image src={BG} alt="" fill sizes="(min-width: 1000px) 25vw, 50vw" className="object-cover" />
+        <Image src={BG} alt="" fill sizes="(min-width: 1101px) 20vw, 50vw" className="object-cover" />
       </div>
       <div className={overlay} />
       <span className="relative text-[18px] leading-[1.25] font-medium text-white">{title}</span>
@@ -55,8 +55,8 @@ export function Conditions() {
           </div>
         </div>
 
-        {/* Desktop: 4 × 2 grid, 2 columns below 1000px */}
-        <div className="hidden gap-4 md:grid md:grid-cols-2 quad:grid-cols-4" data-testid="conditions-grid">
+        {/* Desktop: 10 cards as 5 × 2 from 1101px; 2 columns below. */}
+        <div className="hidden gap-4 md:grid md:grid-cols-2 split:grid-cols-5" data-testid="conditions-grid">
           {[...conditionsA, ...conditionsB].map((c) => <DesktopCard key={c.title} {...c} />)}
         </div>
       </div>
