@@ -118,7 +118,7 @@ export const doctors = [
 export const plans = [
   { name: 'Gold Individual', sub: 'For you', amount: 'AED 1', badgeIcon: '/assets/icons/mug-g.svg', badge: 'Less than a cup of karak chai', billed: 'Billed annually at AED 365',
     features: ['50+ biomarkers tested 2 times a year', 'Access to doctors & specialists', 'Spot potential health risks early', 'Personalised guidance for your health needs'], starBoxW: 194, star: '/assets/icons/star-1.svg' },
-  { name: 'Gold Family', sub: 'Up to 4 members above 18+ ', amount: 'AED 2', badgeIcon: '/assets/icons/badge-percent-g.svg', badge: 'Less than AED 0.50/ per member', billed: 'Billed annually at AED 730',
+  { name: 'Gold Family', sub: 'Up to 4 members above 18+ ', amount: 'AED 2', badgeIcon: '/assets/icons/badge-percent-g.svg', badge: 'AED 0.50 per member', billed: 'Billed annually at AED 730',
     features: ['Everything in Individual, for each member', 'Separate results and plan for every person', 'One subscription, managed by you'], starBoxW: 204, star: '/assets/icons/star-2.svg' },
 ];
 
