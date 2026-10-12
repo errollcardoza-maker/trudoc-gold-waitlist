@@ -6,6 +6,19 @@ import { Icon } from '../Icon';
 
 const ease = 'cubic-bezier(0.2,0.8,0.2,1)';
 
+/** Renders **bold** spans in an answer. */
+function withBold(text: string) {
+  return text.split(/\*\*(.+?)\*\*/g).map((part, i) =>
+    i % 2 ? (
+      <strong key={i} className="font-semibold text-ink">
+        {part}
+      </strong>
+    ) : (
+      part
+    ),
+  );
+}
+
 export function Faq() {
   // "What happens after I get my results?" is open by default; at most one item is open at a time.
   const [openIdx, setOpenIdx] = useState<number | null>(FAQ_DEFAULT_OPEN);
@@ -50,7 +63,7 @@ export function Faq() {
                           className="block pt-1 text-xs leading-[1.5] font-normal text-body md:max-w-[640px] md:pt-2.5 md:text-[16px] md:leading-[1.6] md:text-pretty"
                           style={{ transition: `transform 0.36s ${ease}`, transform: `translateY(${open ? 0 : -6}px)` }}
                         >
-                          {a}
+                          {withBold(a)}
                         </span>
                       </div>
                     </div>

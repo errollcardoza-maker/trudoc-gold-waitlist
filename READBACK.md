@@ -80,7 +80,8 @@ All 14 items are applied on mobile and web. The updated prototypes match at 375/
 | C2 | Biomarker indent (§4) | Already removed in the previous release, at your request. |
 | C3 | "Nutrionist" | Kept as written, pending product confirmation (brief note). |
 | C4 | Hero art | `human.png`, `tabby.png` and `tamara.png` are deleted. The test tube preloads on mobile; on desktop it loads eagerly in view. |
-| C5 | Conditions (updated 12 Oct) | 10 health flags with their tracking biomarkers, supplied by product. Mobile shows two scrolling rows of 5; desktop shows 5 × 2 from 1101px and 2 columns below. Hyphenated biomarker names (hs-CRP, non-HDL, DHEA-S) don't break across lines. |
+| C5 | Conditions (updated 12 Oct) | 10 health flags with their tracking biomarkers, supplied by product. Mobile shows two scrolling rows of 5 cards, each 200px wide (widened on request); desktop shows 4 columns from 1101px (rows of 4, 4, 2) and 2 columns below. The kidney card is titled "Kidney function risk". Hyphenated biomarker names (hs-CRP, non-HDL, DHEA-S) don't break across lines. |
+| C6 | FAQ (updated 12 Oct) | Replaced with the 5 product-supplied questions. Phrases marked **bold** in the source render in semibold ink. The default-open item is still index 3, now "What happens if my health check-up results show a potential risk?". |
 
 ## Open questions for you
 

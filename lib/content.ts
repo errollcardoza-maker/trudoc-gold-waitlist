@@ -101,7 +101,7 @@ export const conditionsA = [
   { title: 'Cardiovascular risk', desc: 'Tracked through total cholesterol, LDL, HDL, non-\u2060HDL, triglycerides, ApoB, Lipoprotein(a), hs-\u2060CRP and homocysteine' },
   { title: 'Type 2 diabetes risk', desc: 'Tracked through fasting glucose, HbA1c and fasting insulin' },
   { title: 'Fatty liver risk', desc: 'Tracked through ALT, AST, GGT and ALP' },
-  { title: 'Chronic kidney disease risk', desc: 'Tracked through creatinine, eGFR, urea (BUN) and urine albumin:creatinine (uACR)' },
+  { title: 'Kidney function risk', desc: 'Tracked through creatinine, eGFR, urea (BUN) and urine albumin:creatinine (uACR)' },
   { title: 'Thyroid disorders', desc: 'Tracked through TSH, Free T4, Free T3 and TPO antibodies' },
 ];
 export const conditionsB = [
@@ -127,17 +127,18 @@ export const plans = [
     features: ['Everything in Individual, for each member', 'Separate results and plan for every person', 'One subscription, managed by you'], starBoxW: 204, star: '/assets/icons/star-2.svg' },
 ];
 
+// Answers may contain **bold** spans (rendered by components/landing/Faq.tsx).
 export const faqs: [string, string][] = [
-  ["Are the tests covered by my insurance?",
-    "Your Gold plan already includes the tests, so you don't need insurance to get them. Whether your own insurance covers tests depends on your policy."],
-  ["Is Gold different from my insurance or annual health check?",
-    "Yes. Insurance covers you when you're unwell, and an annual check-up gives you a one-time snapshot. Gold tests you twice a year, so you and your doctor can see how your health is changing and act early."],
-  ["Are medicines and treatment included in my Gold plan?",
-    "No. Gold includes your tests and access to doctors and specialists. Medicines and treatment are not part of the plan."],
-  ["What happens after I get my results?",
-    "You'll see a simple report in the app. A doctor then goes through it with you, explains what needs attention and tells you what to do next. If needed, we'll connect you with the right specialist."],
-  ["What if my results show a potential health risk?",
-    "Your doctor will explain what it means and what to do next. If you need a closer look, we'll connect you with the right specialist."],
+  ["How is TruDoc Gold different from health insurance?",
+    "Health insurance helps cover eligible healthcare expenses, subject to your policy. TruDoc Gold focuses on proactive health management, with **two comprehensive health check-ups every year, regardless of whether you have a diagnosed condition**. You also get access to doctors and specialists who can help you act on your results, followed by a repeat check-up to track your progress."],
+  ["Who can I add to my Gold Family Plan?",
+    "You can include up to **four members aged 18 or older** in your family plan. Each member gets access to their own health journey and the benefits included in Gold. Children under 18 cannot be added to the plan."],
+  ["Are medicines and treatments included in TruDoc Gold?",
+    "No. Medicines and treatments are not included in the Gold membership fee. However, as a healthcare provider, TruDoc can help coordinate your care and guide you towards the appropriate treatment. If your insurance covers the prescribed medicines, tests or treatments, we can help you navigate the process, subject to your policy's terms and approvals."],
+  ["What happens if my health check-up results show a potential risk?",
+    "Your doctor will review your results, explain what needs attention and help you understand the next steps. Where appropriate, you can access specialist consultations and a personalised care plan. Your second annual check-up helps you and your doctor track changes and assess your progress."],
+  ["What happens after I join the waitlist?",
+    "Once you join the waitlist, our team will get in touch to walk you through the TruDoc Gold plan, understand your health needs and answer any questions you have. **You’ll only be asked to make a payment once you’re comfortable with the plan and ready to proceed.**"],
 ];
 export const FAQ_DEFAULT_OPEN = 3;
 

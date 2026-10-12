@@ -32,10 +32,10 @@ test('biomarkers: Heart is open by default and only one area opens at a time', a
   await expect(heart).toHaveAttribute('aria-expanded', 'false');
 });
 
-test('FAQ: "What happens after I get my results?" is open by default; one open at a time', async ({ page }) => {
+test('FAQ: "What happens if my health check-up results show a potential risk?" is open by default; one open at a time', async ({ page }) => {
   const faq = page.getByTestId('faq');
-  const q3 = faq.getByRole('button', { name: 'What happens after I get my results?' });
-  const q0 = faq.getByRole('button', { name: 'Are the tests covered by my insurance?' });
+  const q3 = faq.getByRole('button', { name: 'What happens if my health check-up results show a potential risk?' });
+  const q0 = faq.getByRole('button', { name: 'How is TruDoc Gold different from health insurance?' });
 
   await expect(q3).toHaveAttribute('aria-expanded', 'true');
   await expect(faq.locator('button[aria-expanded="true"]')).toHaveCount(1);
@@ -45,7 +45,7 @@ test('FAQ: "What happens after I get my results?" is open by default; one open a
   await expect(q3).toHaveAttribute('aria-expanded', 'false');
 
   // Tapping the answer text (not just the question) also toggles, as in the prototype.
-  await faq.getByText(/^Your Gold plan already includes the tests/).click();
+  await faq.getByText(/^Health insurance helps cover eligible/).click();
   await expect(faq.locator('button[aria-expanded="true"]')).toHaveCount(0);
 });
 
@@ -102,4 +102,12 @@ test('Oct 12 change set: copy, phone, removed items', async ({ page }) => {
   await expect(page.getByText('Blood Pressure')).toHaveCount(0);
   // New hero art
   await expect(page.locator('img[src*="test-tube.png"]').first()).toBeAttached();
+});
+
+test('FAQ answers render **bold** phrases as bold text, with no stray asterisks', async ({ page }) => {
+  const faq = page.getByTestId('faq');
+  await faq.getByRole('button', { name: 'What happens after I join the waitlist?' }).click();
+  await expect(faq.locator('strong', { hasText: 'only be asked to make a payment' })).toBeVisible();
+  await expect(faq.locator('strong')).toHaveCount(3);
+  await expect(faq.getByText(/\*\*/)).toHaveCount(0);
 });

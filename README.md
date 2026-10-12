@@ -8,7 +8,7 @@ Production build of the TruDoc Gold waitlist landing page. It's a single-route N
 - **Screens:** the landing, form and success screen all live on `/`. The URL stays in sync (`?join=1` for the form, `?join=success` after submitting), so browser Back and Forward work and `/?join=1` deep-links to the form. A direct visit to `?join=success` redirects to `/`.
 - **Mobile (< 768px):** the form is a full-screen sheet that expands out of the sticky CTA.
 - **Desktop/tablet (≥ 768px):** the form opens in a modal that animates out of the floating CTA bar. The modal has a focus trap, scroll lock, and closes on Esc, the backdrop or ×.
-- **Breakpoints:** `md` is 768px; `duo` (1001px) gives the two-column hero; `split` (1101px) gives the Biomarkers/FAQ 5fr/7fr split and the 5 × 2 conditions grid. They're defined in `app/globals.css`.
+- **Breakpoints:** `md` is 768px; `duo` (1001px) gives the two-column hero; `split` (1101px) gives the Biomarkers/FAQ 5fr/7fr split and the 4-column conditions grid. They're defined in `app/globals.css`.
 - See [`READBACK.md`](READBACK.md) for the section/copy inventory and every decision made where the brief, the prototype and the Figma audit disagreed.
 
 ## Local setup

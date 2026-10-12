@@ -6,9 +6,9 @@ const overlay = 'absolute inset-0 bg-[linear-gradient(0deg,rgba(7,4,1,0.2)_0%,rg
 
 function MobileCard({ title, desc }: { title: string; desc: string }) {
   return (
-    <div className="relative flex min-h-[113px] w-[168px] shrink-0 flex-col gap-1.5 overflow-hidden rounded-xl bg-surface p-3">
-      <div className="absolute top-[-112px] left-[-5px] h-[288px] w-[178px]">
-        <Image src={BG} alt="" fill sizes="178px" className="object-cover" />
+    <div className="relative flex min-h-[113px] w-[200px] shrink-0 flex-col gap-1.5 overflow-hidden rounded-xl bg-surface p-3">
+      <div className="absolute top-[-112px] left-[-5px] h-[288px] w-[calc(100%+10px)]">
+        <Image src={BG} alt="" fill sizes="210px" className="object-cover" />
       </div>
       <div className={overlay} />
       <span className="relative text-sm leading-[1.2] font-medium text-white">{title}</span>
@@ -21,7 +21,7 @@ function DesktopCard({ title, desc }: { title: string; desc: string }) {
   return (
     <div className="relative flex min-h-[168px] flex-col gap-2 overflow-hidden rounded-2xl bg-[rgb(30,22,10)] p-5">
       <div className="absolute -inset-x-2.5 -inset-y-10">
-        <Image src={BG} alt="" fill sizes="(min-width: 1101px) 20vw, 50vw" className="object-cover" />
+        <Image src={BG} alt="" fill sizes="(min-width: 1101px) 25vw, 50vw" className="object-cover" />
       </div>
       <div className={overlay} />
       <span className="relative text-[18px] leading-[1.25] font-medium text-white">{title}</span>
@@ -55,8 +55,8 @@ export function Conditions() {
           </div>
         </div>
 
-        {/* Desktop: 10 cards as 5 × 2 from 1101px; 2 columns below. */}
-        <div className="hidden gap-4 md:grid md:grid-cols-2 split:grid-cols-5" data-testid="conditions-grid">
+        {/* Desktop: 4 columns from 1101px (rows of 4, 4, 2); 2 columns below. */}
+        <div className="hidden gap-4 md:grid md:grid-cols-2 split:grid-cols-4" data-testid="conditions-grid">
           {[...conditionsA, ...conditionsB].map((c) => <DesktopCard key={c.title} {...c} />)}
         </div>
       </div>

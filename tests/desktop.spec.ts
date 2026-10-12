@@ -152,11 +152,11 @@ for (const width of [768, 900, 1024, 1100, 1280, 1440]) {
   });
 }
 
-test('layout collapses: hero stacks ≤1000px, splits stack ≤1100px, conditions 5 × 2 from 1101px', async ({ page }) => {
+test('layout collapses: hero stacks ≤1000px, splits stack ≤1100px, conditions 4 columns from 1101px', async ({ page }) => {
   const cols = (sel: string) =>
     page.locator(sel).first().evaluate((el) => getComputedStyle(el).gridTemplateColumns.split(' ').length);
   await page.setViewportSize({ width: 1101, height: 900 });
-  expect(await cols('[data-testid="conditions-grid"]')).toBe(5);
+  expect(await cols('[data-testid="conditions-grid"]')).toBe(4);
   expect(await page.getByTestId('biomarkers').evaluate((el) => getComputedStyle(el.parentElement!).gridTemplateColumns.split(' ').length)).toBe(2);
   await page.setViewportSize({ width: 1100, height: 900 });
   expect(await cols('[data-testid="conditions-grid"]')).toBe(2);
