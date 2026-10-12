@@ -75,7 +75,7 @@ function Features({ size }: { size: Size }) {
 /** < 768px. Unchanged from the mobile prototype. */
 function MobileHero() {
   return (
-    <section className="relative flex flex-col overflow-hidden bg-[linear-gradient(180deg,rgb(0,0,2)_0%,rgb(24,15,0)_52.43%)] px-4 py-10 md:hidden">
+    <section className="relative flex flex-col overflow-hidden bg-[linear-gradient(180deg,rgb(0,0,2)_0%,rgb(24,15,0)_52.43%)] px-4 pt-10 pb-[72px] md:hidden">
       <div data-reveal="hero" data-reveal-delay="120" aria-hidden="true" className="pointer-events-none absolute inset-0">
         <div className="pointer-events-none absolute top-[90px] right-0 left-0 flex flex-col items-stretch gap-2 opacity-50">
           <Marquee chips={chipsA} dir="l" size="mobile" />

@@ -26,7 +26,7 @@ function Wordmark({ className, style }: { className: string; style?: CSSProperti
 function MobileFooter() {
   return (
     <>
-      <footer data-reveal="section" className={`relative flex h-[332px] flex-col gap-6 overflow-hidden px-4 py-12 md:hidden ${gradient}`}>
+      <footer data-reveal="section" className={`relative flex h-[364px] flex-col gap-6 overflow-hidden px-4 pt-20 pb-12 md:hidden ${gradient}`}>
         <Icon
           data-reveal="glow"
           src="/assets/icons/star-1.svg"
