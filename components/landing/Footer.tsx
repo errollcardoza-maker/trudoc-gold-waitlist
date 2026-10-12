@@ -3,7 +3,7 @@ import { Icon } from '../Icon';
 
 const gradient = 'bg-[linear-gradient(180deg,rgb(0,0,2)_0%,rgb(24,15,0)_52.43%)]';
 const links = [
-  { href: 'tel:+971551216628', label: '+971 551 21 6628' },
+  { href: 'tel:800878362', label: '800 878 362' },
   { href: 'mailto:info@trudocgroup.com', label: 'info@trudocgroup.com' },
 ];
 

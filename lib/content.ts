@@ -1,12 +1,13 @@
 // All copy and data below is taken verbatim from the prototype
 // (`TruDoc Gold Waitlist.dc.html`). Do not edit copy here without design sign-off.
 
-export const chipsA = ['Heart Rate', 'Blood Pressure', 'BMI', 'SpO2', 'HRV', 'Sleep', 'Glucose', 'Cholesterol', 'Cortisol'];
-export const chipsB = ['HbA1c', 'LDL', 'HDL', 'Triglycerides', 'CRP', 'TSH', 'Vitamin D', 'Ferritin', 'Creatinine'];
+// Only biomarkers that are actually in the test panel.
+export const chipsA = ['Cholesterol', 'LDL', 'HDL', 'ApoB', 'Lipoprotein(a)', 'Glucose', 'HbA1c', 'Insulin', 'Uric acid', 'ALT', 'eGFR'];
+export const chipsB = ['TSH', 'Free T4', 'Testosterone', 'Cortisol', 'hs-CRP', 'Homocysteine', 'Hemoglobin', 'Vitamin D', 'Vitamin B12', 'Ferritin', 'Magnesium'];
 
 export const heroFeatures = [
   { icon: '/assets/icons/test-tube-y.svg', title: 'Full-body tested 2x a year', desc: '50+ biomarkers tested without relying on\ninsurance coverage' },
-  { icon: '/assets/icons/user-md-y.svg', title: 'Review with a doctor who gets you', desc: 'Review your results with a doctor and leave with a\nclear action plan.' },
+  { icon: '/assets/icons/user-md-y.svg', title: 'A doctor and specialist by your side, always', desc: 'Get ongoing support from doctors and specialists for\nwhatever your health needs' },
   { icon: '/assets/icons/risk-y.svg', title: 'Spot health risks early', desc: 'Track chronic-risk markers and understand changes\nin your health over time' },
 ];
 
@@ -18,7 +19,7 @@ export const heroPrices = [
 export const steps = [
   { img: '/assets/step1.png', title: '50+ biomarkers, tested at home', desc: 'One comprehensive test covering key areas like heart, metabolism, hormones, liver, kidney and thyroid' },
   { img: '/assets/step2.png', title: 'Your results, made easy to understand', desc: 'See your biomarkers in a simple, easy-to-read app report, with clear ranges showing what’s healthy and what needs attention' },
-  { img: '/assets/step3.png', title: 'A doctor who makes sense of it', desc: 'Talk through your results with a doctor who understands you and gives you clear, personalised guidance on what to do next' },
+  { img: '/assets/step3.png', title: 'A doctor by your side, always', desc: 'Talk through your results with a doctor who understands you and provides ongoing, personalised guidance whenever you need it' },
   { img: '/assets/step4.png', title: 'The right specialist when you need one', desc: 'If something needs a closer look, get connected with the right specialist for a more targeted plan' },
   { img: '/assets/step5.png', title: 'Keep track of your progress', desc: 'Test again to see how your health is changing, and let your doctor refine your plan based on your latest results' },
 ];
@@ -94,44 +95,44 @@ export const areas: HealthArea[] = [
 ];
 
 export const conditionsA = [
-  { title: 'Heart disease', desc: 'Early signs of cholesterol and artery problems' },
-  { title: 'Type 2 diabetes', desc: 'Rising blood sugar and insulin resistance, years before diagnosis' },
-  { title: 'Fatty liver', desc: 'Liver stress linked to diet, weight and alcohol' },
-  { title: 'Kidney disease', desc: 'Changes in how well your kidneys filter' },
+  { title: 'Heart disease', desc: 'Tracked through LDL, ApoB, Lipoprotein(a) and hs-CRP' },
+  { title: 'Type 2 diabetes', desc: 'Tracked through fasting glucose, HbA1c and fasting insulin' },
+  { title: 'Fatty liver', desc: 'Tracked through ALT, AST, GGT and triglycerides' },
+  { title: 'Kidney disease', desc: 'Tracked through creatinine, eGFR, urea and uACR' },
 ];
 export const conditionsB = [
-  { title: 'Thyroid disorders', desc: 'An under- or overactive thyroid affecting energy and weight' },
-  { title: 'Chronic inflammation', desc: 'Low-grade inflammation linked to many long-term conditions' },
-  { title: 'Anaemia and deficiencies', desc: 'Low iron and vitamins behind fatigue and poor recovery' },
-  { title: 'Hormone imbalance', desc: 'Shifts that affect energy, mood, sleep and metabolism' },
+  { title: 'Thyroid disorders', desc: 'Tracked through TSH, Free T4, Free T3 and TPO antibodies' },
+  { title: 'Gout', desc: 'Tracked through uric acid levels' },
+  { title: 'Anaemia', desc: 'Tracked through hemoglobin, ferritin, iron and vitamin B12' },
+  { title: 'Low testosterone', desc: 'Tracked through total testosterone and SHBG' },
 ];
 
 export const doctors = [
-  { name: 'Dr. Mehryar Andacheh', role: 'GP certified, DHA licensed', exp: '10+ years of experience', img: '/assets/doc-1.png', w: 416, h: 398 },
-  { name: 'Danya Taha', role: 'Nutrionist, DHA licensed', exp: '4+ years of experience', img: '/assets/doc-2.png', w: 374, h: 398 },
-  { name: 'Dr. Rana Ahmed', role: 'DHA licensed', exp: '18+ years of experience', img: '/assets/doc-3.png', w: 416, h: 398 },
-  { name: 'Dr. Azza Elhadi', role: 'DHA licensed', exp: '7+ years of experience', img: '/assets/doc-4.png', w: 416, h: 398 },
-  { name: 'Dr. Anas Abdul', role: 'DHA licensed', exp: '3+ years of experience', img: '/assets/doc-5.png', w: 416, h: 400 },
+  { name: 'Dr. Mehryar Andacheh', role: 'GP certified, DHA licensed', img: '/assets/doc-1.png', w: 416, h: 398 },
+  { name: 'Danya Taha', role: 'Nutrionist, DHA licensed', img: '/assets/doc-2.png', w: 374, h: 398 },
+  { name: 'Dr. Rana Ahmed', role: 'GP certified, DHA licensed', img: '/assets/doc-3.png', w: 416, h: 398 },
+  { name: 'Dr. Azza Elhadi', role: 'GP certified, DHA licensed', img: '/assets/doc-4.png', w: 416, h: 398 },
+  { name: 'Dr. Anas Abdul', role: 'GP certified, DOH licensed', img: '/assets/doc-5.png', w: 416, h: 400 },
 ];
 
 export const plans = [
   { name: 'Gold Individual', sub: 'For you', amount: 'AED 1', badgeIcon: '/assets/icons/mug-g.svg', badge: 'Less than a cup of karak chai', billed: 'Billed annually at AED 365',
-    features: ['50+ biomarkers, tested through the year', 'Your own ongoing health plan', 'Doctor review of every result'], starBoxW: 194, star: '/assets/icons/star-1.svg' },
+    features: ['50+ biomarkers tested 2 times a year', 'Access to doctors & specialists', 'Spot potential health risks early', 'Personalised guidance for your health needs'], starBoxW: 194, star: '/assets/icons/star-1.svg' },
   { name: 'Gold Family', sub: 'Up to 4 members above 18+ ', amount: 'AED 2', badgeIcon: '/assets/icons/badge-percent-g.svg', badge: 'Less than AED 0.50/ per member', billed: 'Billed annually at AED 730',
     features: ['Everything in Individual, for each member', 'Separate results and plan for every person', 'One subscription, managed by you'], starBoxW: 204, star: '/assets/icons/star-2.svg' },
 ];
 
 export const faqs: [string, string][] = [
-  ['Are the tests covered by my insurance?',
-    'Gold is a subscription for proactive health monitoring, with testing included as part of your plan. Coverage under your existing insurance depends on your policy, so Gold offers a separate way to access the tests included in your subscription.'],
-  ['Is Gold different from my insurance or annual health check?',
-    'Insurance helps cover eligible medical care, while an annual health check gives you a snapshot of your health. Gold brings regular biomarker testing, easy-to-understand results and doctor-led guidance together to help you track changes over time.'],
-  ['Are medicines and treatment included in my Gold plan?',
-    "Gold includes testing and doctor-led guidance to help you understand your health. Any medication, treatment or additional specialist services included in your subscription will depend on the plan's coverage."],
-  ['What happens after I get my results?',
-    'Your results are presented in an easy-to-read report in the app. A doctor reviews your results with you, explains what needs attention and helps you understand the next steps.'],
-  ['What if my results show a potential health risk?',
-    'Your doctor will help you understand your results and recommend the next steps. If a closer assessment is needed, you can be connected with the appropriate specialist for further guidance.'],
+  ["Are the tests covered by my insurance?",
+    "Your Gold plan already includes the tests, so you don't need insurance to get them. Whether your own insurance covers tests depends on your policy."],
+  ["Is Gold different from my insurance or annual health check?",
+    "Yes. Insurance covers you when you're unwell, and an annual check-up gives you a one-time snapshot. Gold tests you twice a year, so you and your doctor can see how your health is changing and act early."],
+  ["Are medicines and treatment included in my Gold plan?",
+    "No. Gold includes your tests and access to doctors and specialists. Medicines and treatment are not part of the plan."],
+  ["What happens after I get my results?",
+    "You'll see a simple report in the app. A doctor then goes through it with you, explains what needs attention and tells you what to do next. If needed, we'll connect you with the right specialist."],
+  ["What if my results show a potential health risk?",
+    "Your doctor will explain what it means and what to do next. If you need a closer look, we'll connect you with the right specialist."],
 ];
 export const FAQ_DEFAULT_OPEN = 3;
 

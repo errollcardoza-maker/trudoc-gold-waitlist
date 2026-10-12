@@ -293,12 +293,13 @@ export function WaitlistForm(p: Props) {
       <div
         className={`sticky bottom-0 flex flex-col items-stretch gap-4 bg-white ${modal ? 'px-6 pt-4 pb-6' : 'p-4 pb-[calc(16px+env(safe-area-inset-bottom))]'}`}
       >
-        <div className="flex flex-col items-stretch gap-2 rounded-xl bg-[linear-gradient(90deg,rgb(21,21,22)_0%,rgb(41,34,23)_100%)] p-2 shadow-[0_16px_32px_-12px_rgba(14,18,27,0.1)]">
+        <div className="relative flex flex-col items-stretch gap-2.5 rounded-xl bg-[linear-gradient(90deg,#151516_0%,#292217_100%)] px-2 pt-3 pb-2 shadow-[0_16px_32px_-12px_rgba(14,18,27,0.1)]">
+          <div aria-hidden="true" className="grad-ring bg-[linear-gradient(180deg,#53360C_0%,rgba(83,54,12,0)_100%)]" />
           {submitError ? (
-            <span role="alert" className="text-center text-xs leading-[1.5] font-medium text-[rgb(249,112,102)]">{submitError}</span>
+            <span role="alert" className="relative text-center text-xs leading-[18px] font-medium text-[rgb(249,112,102)]">{submitError}</span>
           ) : (
-            <span className="text-center text-xs leading-[1.5] font-normal whitespace-pre-wrap text-white/70">
-              {"Free to join, with no payment now. We'll only\n use these details to notify you "}
+            <span className="relative text-center text-xs leading-[18px] font-normal whitespace-pre-line text-white/70">
+              {"Free to join, with no payment now. We'll only\nuse these details to notify you"}
             </span>
           )}
           <button
@@ -306,16 +307,19 @@ export function WaitlistForm(p: Props) {
             disabled={loading}
             aria-busy={loading}
             data-testid="submit"
-            className="flex h-[52px] cursor-pointer items-center justify-center gap-2 rounded-xl border-0 bg-[rgb(226,166,49)] px-5 py-3.5 shadow-[0_0_0_1px_rgb(226,166,49)] hover:bg-[rgb(236,178,64)] active:scale-[0.98]"
+            className="relative m-0 flex h-[52px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-xl border-0 bg-gold px-5 py-3.5 shadow-[0_0_0_1px_#E2A631] hover:bg-[rgb(236,178,64)] active:scale-[0.98]"
           >
+            <span aria-hidden="true" className="pointer-events-none absolute top-[-1.7px] left-[39.3px] h-[95px] w-[6.96px] origin-top-left rotate-[15.59deg] bg-white/20" />
+            <span aria-hidden="true" className="pointer-events-none absolute top-[-3.54px] left-[51.07px] h-[95px] w-[14.98px] origin-top-left rotate-[15.59deg] bg-white/20" />
+            <span aria-hidden="true" className="grad-ring bg-[linear-gradient(180deg,rgba(255,255,255,0.4)_0%,rgba(255,255,255,0)_100%)]" />
             {loading && (
               <span
                 aria-hidden="true"
-                className="inline-block size-4 rounded-full border-2 border-[rgba(21,19,15,0.25)] border-t-[rgb(21,19,15)]"
+                className="relative inline-block size-4 rounded-full border-2 border-[rgba(21,19,15,0.25)] border-t-[rgb(21,19,15)]"
                 style={{ animation: 'tdspin 0.7s linear infinite' }}
               />
             )}
-            <span className="text-base leading-6 font-bold whitespace-nowrap text-[rgb(21,19,15)]">
+            <span className="relative text-base leading-6 font-bold whitespace-nowrap text-[#15130F]">
               {loading ? 'Joining…' : submitError ? 'Try again' : 'Join the waitlist'}
             </span>
           </button>

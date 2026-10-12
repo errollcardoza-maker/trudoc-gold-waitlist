@@ -2,10 +2,7 @@ import Image from 'next/image';
 import { chipsA, chipsB, heroFeatures, heroPrices } from '@/lib/content';
 import { Icon } from '../Icon';
 
-const fade = 'linear-gradient(90deg, transparent 0%, #000 18%, #000 82%, transparent 100%)';
 const chipsMask = 'linear-gradient(90deg, transparent 0%, #000 15%, #000 85%, transparent 100%)';
-const humanMaskDesktop =
-  'linear-gradient(90deg, transparent 0%, #000 14%, #000 86%, transparent 100%), linear-gradient(180deg, #000 72%, transparent 100%)';
 
 type Size = 'mobile' | 'desktop';
 
@@ -96,19 +93,25 @@ function MobileHero() {
 
       <div className="relative flex flex-col gap-10">
         <div className="flex flex-col gap-6">
-          <div data-reveal="hero" data-reveal-delay="200" className="relative h-[157px] overflow-hidden">
+          {/* Glow + test tube, centred; the box doesn't clip (the section does). */}
+          <div data-reveal="hero" data-reveal-delay="200" className="relative h-[157px]">
+            <Icon
+              src="/assets/icons/tube-glow.svg"
+              w={300}
+              h={300}
+              loading="eager"
+              className="pointer-events-none absolute top-1/2 left-1/2 -mt-[150px] -ml-[150px] max-w-none"
+            />
             <Image
-              src="/assets/human.png"
+              src="/assets/test-tube.png"
               alt=""
-              width={394}
-              height={189}
+              width={140}
+              height={140}
               loading="eager"
               fetchPriority="high"
-              sizes="394px"
-              className="pointer-events-none absolute top-[-14px] left-1/2 ml-[-197px] block h-[189px] w-[394px] max-w-none"
-              style={{ WebkitMaskImage: fade, maskImage: fade }}
+              sizes="140px"
+              className="pointer-events-none absolute top-1/2 left-1/2 -mt-[72px] -ml-[70px] block size-[140px] max-w-none"
             />
-            <div className="absolute top-[109px] right-0 left-0 h-12 bg-[linear-gradient(180deg,rgba(7,4,1,0)_0%,rgb(10,6,1)_100%)]" />
           </div>
 
           <div data-reveal="hero" data-reveal-delay="320" className="flex flex-col gap-2">
@@ -189,20 +192,19 @@ function DesktopHero() {
             <Marquee chips={chipsB} dir="r" size="desktop" />
             <Marquee chips={chipsA} dir="l" size="desktop" />
           </div>
-          {/* TODO: swap in a 2x human.png (≥1300px wide); the current asset is 656px and soft at this size. */}
+          <Icon
+            src="/assets/icons/tube-glow.svg"
+            w={640}
+            h={640}
+            className="pointer-events-none absolute top-1/2 left-1/2 -mt-80 -ml-80 max-w-none"
+          />
           <Image
-            src="/assets/human.png"
+            src="/assets/test-tube.png"
             alt=""
-            width={656}
-            height={314}
-            sizes="(min-width: 1001px) 52vw, 128vw"
-            className="relative mx-[-14%] block h-auto w-[128%] max-w-none"
-            style={{
-              WebkitMaskImage: humanMaskDesktop,
-              maskImage: humanMaskDesktop,
-              WebkitMaskComposite: 'source-in',
-              maskComposite: 'intersect',
-            }}
+            width={310}
+            height={310}
+            sizes="310px"
+            className="relative block size-[310px] max-w-none"
           />
         </div>
       </div>

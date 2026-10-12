@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { plans } from '@/lib/content';
 import { Icon } from '../Icon';
 
@@ -14,7 +13,7 @@ export function Pricing() {
             Only waitlist members get access to launch pricing when TruDoc Gold becomes available.
           </p>
         </div>
-        {/* Mobile: cards and the payment row share one column. Desktop: a plans grid, then the payment row. */}
+        {/* Mobile: one column of cards. Desktop: a plans grid (items stretch, so cards stay equal height). */}
         <div className="flex flex-col gap-4 md:contents">
           <div className="contents md:grid md:w-full md:max-w-[880px] md:grid-cols-[repeat(auto-fit,minmax(320px,1fr))] md:gap-6">
             {plans.map((p) => (
@@ -57,15 +56,6 @@ export function Pricing() {
                 </div>
               </div>
             ))}
-          </div>
-          <div className="flex flex-col items-center gap-3 md:flex-row md:flex-wrap md:justify-center md:gap-5">
-            <span className="text-sm leading-[1.2] font-normal tracking-[-0.02em] whitespace-nowrap text-black md:text-[16px] md:tracking-normal">
-              Split your payment with
-            </span>
-            <div className="flex items-center justify-center gap-4">
-              <Image src="/assets/tabby.png" alt="tabby" width={160} height={64} className="block h-[31px] w-auto md:h-9" />
-              <Image src="/assets/tamara.png" alt="tamara" width={194} height={64} className="block h-[31px] w-auto md:h-9" />
-            </div>
           </div>
         </div>
       </div>

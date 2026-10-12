@@ -70,6 +70,18 @@ These are the same components, data, copy, API and validation as mobile. Respons
 | W5 | Phone `maxLength` | 16 in the modal too (see decision 1). The web prototype still has 12. |
 | W6 | Biomarker cards on mobile | **Changed at your request:** they're now full width with no 56px indent, matching the web prototype's no-indent rule. The mobile snapshot baseline includes this change. |
 
+## Change set, 12 Oct 2026 (`handoff-2026-10-12/CHANGES_PROMPT.md`)
+
+All 14 items are applied on mobile and web. The updated prototypes match at 375/320px and 1440/1280/1024px, including the modal.
+
+| # | Topic | Decision |
+| --- | --- | --- |
+| C1 | "How it works?" weight (§14) | **500 on both**, as the brief says ("mobile + web"). The updated mobile prototype still uses 600. |
+| C2 | Biomarker indent (§4) | Already removed in the previous release, at your request. |
+| C3 | "Nutrionist" | Kept as written, pending product confirmation (brief note). |
+| C4 | Hero art | `human.png`, `tabby.png` and `tamara.png` are deleted. The test tube preloads on mobile; on desktop it loads eagerly in view. |
+| C5 | Conditions at 768–999px | Still 2 columns (W2). The new copy fits without clipping, and cards grow with their text. |
+
 ## Open questions for you
 
 1. **OG image:** the brief asks for one. Please send one; the meta tags are ready.
