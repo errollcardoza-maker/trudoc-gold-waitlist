@@ -28,7 +28,7 @@ export function Faq() {
     <div className="relative z-[1] -mb-8 rounded-b-[28px] bg-surface shadow-[0_1px_0_0_rgba(226,166,49,0.45),0_20px_48px_-10px_rgba(226,166,49,0.35)] md:static md:z-auto md:mb-0 md:rounded-none md:bg-transparent md:shadow-none">
       <section data-reveal="section" className="rounded-b-[28px] bg-surface px-4 py-12 md:rounded-none md:bg-white md:px-(--side) md:py-28">
         <div className="flex flex-col gap-6 md:mx-auto md:grid md:max-w-[1280px] md:grid-cols-1 md:items-start md:gap-8 split:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] split:gap-20">
-          <h2 className="m-0 text-2xl leading-[1.25] font-semibold tracking-[-0.02em] text-black md:text-[40px] md:leading-[1.15] md:tracking-[-0.025em] md:text-balance md:text-ink">FAQ</h2>
+          <h2 className="m-0 text-2xl leading-[1.25] font-semibold tracking-[-0.02em] text-black md:text-[40px] md:leading-[1.15] md:tracking-[-0.025em] md:text-balance md:text-ink">FAQs</h2>
           <div className="flex flex-col gap-4 md:gap-0" data-testid="faq">
             {faqs.map(([q, a], i) => {
               const open = openIdx === i;
