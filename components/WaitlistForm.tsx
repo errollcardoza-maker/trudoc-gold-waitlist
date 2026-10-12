@@ -153,7 +153,7 @@ export function WaitlistForm(p: Props) {
         <div className="flex flex-col gap-1">
           <h1 className="m-0 text-2xl leading-[1.4] font-semibold tracking-[-0.02em] text-black">Join the waitlist</h1>
           <span className="text-sm leading-[1.4] font-normal text-mid">
-            We&apos;ll let you know as soon as TruDoc Gold launches, so you can join at the early-bird rate
+            Get exclusive early-bird pricing, our team will contact you within 24 hours to walk you through TruDoc Gold and answer your questions
           </span>
         </div>
 
@@ -298,8 +298,8 @@ export function WaitlistForm(p: Props) {
           {submitError ? (
             <span role="alert" className="relative text-center text-xs leading-[18px] font-medium text-[rgb(249,112,102)]">{submitError}</span>
           ) : (
-            <span className="relative text-center text-xs leading-[18px] font-normal whitespace-pre-line text-white/70">
-              {"Free to join, with no payment now. We'll only\nuse these details to notify you"}
+            <span className="relative text-center text-xs leading-[18px] font-normal text-white/70">
+              Free to join, with no payment now.
             </span>
           )}
           <button

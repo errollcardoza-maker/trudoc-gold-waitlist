@@ -82,7 +82,7 @@ test('success renders inside the modal; closing resets the form', async ({ page 
   await waitPastBotWindow(page);
   await page.getByTestId('submit').click();
   await expect(dialog(page).getByRole('heading', { name: "You're on the waitlist Omar" })).toBeVisible();
-  await expect(dialog(page).getByText('+971 52 111 2233')).toBeVisible();
+  await expect(dialog(page).getByText(/Our team will call you within 24 hours on your registered number/)).toBeVisible();
   await expect(page).toHaveURL(/\?join=success$/);
 
   await page.getByRole('button', { name: 'Close' }).click();

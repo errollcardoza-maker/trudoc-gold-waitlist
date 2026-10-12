@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState, type MouseEvent } from 'react';
-import { UTM_KEYS, formatPhoneDisplay, type Plan } from '@/lib/validation';
+import { UTM_KEYS, type Plan } from '@/lib/validation';
 import { Landing } from './landing/Landing';
 import { Success } from './Success';
 import { WaitlistForm, type ExpandRect, type FormAnim } from './WaitlistForm';
@@ -58,7 +58,7 @@ export function WaitlistApp() {
   const [phone, setPhone] = useState('');
   const [plan, setPlan] = useState<Plan | null>(null);
   const [openedAt, setOpenedAt] = useState(0);
-  const [done, setDone] = useState<{ firstName: string; phoneDisplay: string } | null>(null);
+  const [done, setDone] = useState<{ firstName: string } | null>(null);
   const [hydrated, setHydrated] = useState(false);
   const [trigger, setTrigger] = useState<HTMLElement | null>(null);
 
@@ -250,7 +250,7 @@ export function WaitlistApp() {
   };
 
   const onSuccess = () => {
-    setDone({ firstName: name.trim().split(/\s+/)[0], phoneDisplay: formatPhoneDisplay(phone) });
+    setDone({ firstName: name.trim().split(/\s+/)[0] });
     setName('');
     setPhone('');
     setPlan(null);

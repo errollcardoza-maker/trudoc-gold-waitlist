@@ -1,6 +1,6 @@
-type Props = { firstName: string; phoneDisplay: string; variant?: 'screen' | 'modal' };
+type Props = { firstName: string; variant?: 'screen' | 'modal' };
 
-export function Success({ firstName, phoneDisplay, variant = 'screen' }: Props) {
+export function Success({ firstName, variant = 'screen' }: Props) {
   const modal = variant === 'modal';
   const Root = modal ? 'div' : 'main';
   return (
@@ -47,7 +47,7 @@ export function Success({ firstName, phoneDisplay, variant = 'screen' }: Props) 
             You&apos;re on the waitlist {firstName}
           </h1>
           <span className="text-center text-sm leading-6 font-medium text-mid">
-            We&apos;ll contact you on {phoneDisplay} as soon as TruDoc Gold launches
+            Your early-bird pricing is secured! Our team will call you within 24 hours on your registered number to guide you through the plan and help you get started with TruDoc Gold.
           </span>
         </div>
       </div>

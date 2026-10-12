@@ -78,7 +78,7 @@ test('submits, shows the success screen, and clears saved progress', async ({ pa
   expect((await res).status()).toBe(200);
 
   await expect(page.getByRole('heading', { name: "You're on the waitlist Jane" })).toBeVisible();
-  await expect(page.getByText("We'll contact you on +971 55 987 6543 as soon as TruDoc Gold launches")).toBeVisible();
+  await expect(page.getByText('Your early-bird pricing is secured! Our team will call you within 24 hours on your registered number')).toBeVisible();
   await expect(page).toHaveURL(/\?join=success$/);
   expect(await page.evaluate(() => localStorage.getItem('tdg-waitlist'))).toBeNull();
 });
