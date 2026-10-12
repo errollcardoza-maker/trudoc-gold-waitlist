@@ -113,10 +113,10 @@ export const conditionsB = [
 ];
 
 export const doctors = [
-  { name: 'Dr. Mehryar Andacheh', role: 'GP certified, DHA licensed', img: '/assets/doc-1.png', w: 416, h: 398 },
+  { name: 'Dr. Imaan Chowdhury', role: 'Specialist, American board certified', img: '/assets/doc-imaan.png', w: 378, h: 398 },
+  { name: 'Dr. Maya El Khouri', role: 'Specialist, American board certified', img: '/assets/doc-maya.png', w: 480, h: 398 },
+  { name: 'Dr. Mehryar Andacheh', role: 'GP certified, DHA licensed', img: '/assets/doc-mehryar.png', w: 398, h: 398 },
   { name: 'Danya Taha', role: 'Nutrionist, DHA licensed', img: '/assets/doc-2.png', w: 374, h: 398 },
-  { name: 'Dr. Rana Ahmed', role: 'GP certified, DHA licensed', img: '/assets/doc-3.png', w: 416, h: 398 },
-  { name: 'Dr. Azza Elhadi', role: 'GP certified, DHA licensed', img: '/assets/doc-4.png', w: 416, h: 398 },
   { name: 'Dr. Anas Abdul', role: 'GP certified, DOH licensed', img: '/assets/doc-5.png', w: 416, h: 400 },
 ];
 
