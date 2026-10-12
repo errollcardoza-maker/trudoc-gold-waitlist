@@ -129,7 +129,7 @@ test('biomarkers: Heart open by default, single-open, sticky heading', async ({ 
   await expect(heart).toHaveAttribute('aria-expanded', 'false');
   await expect(list.locator('[aria-expanded="true"]')).toHaveCount(1);
   const pos = await page
-    .getByRole('heading', { name: /We test 50\+ biomarkers/ })
+    .getByRole('heading', { name: /We test \d+ biomarkers/ })
     .evaluate((el) => getComputedStyle(el.parentElement!).position);
   expect(pos).toBe('sticky');
 });

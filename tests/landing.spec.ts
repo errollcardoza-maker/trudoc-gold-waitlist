@@ -113,3 +113,18 @@ test('FAQ answers render **bold** phrases as bold text, with no stray asterisks'
   await expect(faq.getByRole('button')).toHaveCount(6);
   await expect(faq.getByText(/\*\*/)).toHaveCount(0);
 });
+
+test('biomarker counts are derived from the lists (59 total, blood area 18)', async ({ page }) => {
+  const list = page.getByTestId('biomarkers');
+  await expect(page.getByRole('heading', { name: /We test 59 biomarkers/ })).toBeAttached();
+  await expect(list.getByRole('button', { name: /Inflammation & blood\s*18 biomarkers/ })).toBeAttached();
+  await list.getByRole('button', { name: /^Inflammation & blood/ }).click();
+  const panel = page.locator('#area-panel-blood');
+  for (const m of ['Red blood cells (RBC)', 'MCV', 'MCH', 'MCHC', 'RDW', 'Neutrophils (% and absolute count)', 'MPV (mean platelet volume)'])
+    await expect(panel.getByText(m, { exact: true })).toBeVisible();
+  // No duplicates of the markers that already existed
+  await expect(panel.getByText(/^Ha?emoglobin/)).toHaveCount(1);
+  await expect(panel.getByText(/^Platelet/)).toHaveCount(1);
+  await expect(panel.getByText('Full blood count (WBC + differential)')).toHaveCount(0);
+  await expect(page.getByText(/50\+ biomarkers/)).toHaveCount(0);
+});
