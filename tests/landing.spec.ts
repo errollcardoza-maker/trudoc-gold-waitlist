@@ -116,7 +116,7 @@ test('FAQ answers render **bold** phrases as bold text, with no stray asterisks'
 
 test('biomarker counts are derived from the lists (59 total, blood area 18)', async ({ page }) => {
   const list = page.getByTestId('biomarkers');
-  await expect(page.getByRole('heading', { name: /We test 59 biomarkers/ })).toBeAttached();
+  await expect(page.getByRole('heading', { name: /We test 59 biomarkers\s+across 8 health areas/ })).toBeAttached();
   await expect(list.getByRole('button', { name: /Inflammation & blood\s*18 biomarkers/ })).toBeAttached();
   await list.getByRole('button', { name: /^Inflammation & blood/ }).click();
   const panel = page.locator('#area-panel-blood');
