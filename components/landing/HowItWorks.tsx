@@ -5,7 +5,6 @@ export function HowItWorks() {
   return (
     // Mobile: curved sheet that overlaps the hero by 32px, with a gold hairline and glow above its edge.
     <div className="relative z-[1] -mt-8 rounded-t-[28px] bg-white shadow-[0_-1px_0_0_rgba(226,166,49,0.45),0_-20px_48px_-10px_rgba(226,166,49,0.35)] md:static md:z-auto md:mt-0 md:rounded-none md:shadow-none">
-      <div aria-hidden="true" className="absolute top-2.5 left-1/2 z-[2] -ml-5 h-1 w-10 rounded-[4px] bg-[#E5E5E5] md:hidden" />
       <section data-reveal="section" className="rounded-t-[28px] bg-white px-4 py-12 md:rounded-none md:px-(--side) md:py-28">
         <div className="flex flex-col gap-6 md:mx-auto md:max-w-[1280px] md:gap-12">
           <h2 className="m-0 text-2xl leading-[1.25] font-medium tracking-[-0.02em] whitespace-pre-wrap text-ink md:text-[40px] md:leading-[1.15] md:tracking-[-0.025em]">
