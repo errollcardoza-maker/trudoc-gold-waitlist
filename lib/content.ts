@@ -139,6 +139,8 @@ export const faqs: [string, string][] = [
     "Your doctor will review your results, explain what needs attention and help you understand the next steps. Where appropriate, you can access specialist consultations and a personalised care plan. Your second annual check-up helps you and your doctor track changes and assess your progress."],
   ["What happens after I join the waitlist?",
     "Once you join the waitlist, our team will get in touch to walk you through the TruDoc Gold plan, understand your health needs and answer any questions you have. **You’ll only be asked to make a payment once you’re comfortable with the plan and ready to proceed.**"],
+  ["Are TruDoc Gold lab tests reliable and accurate?",
+    "Our lab tests are conducted in laboratories accredited to **ISO 15189:2022**, an international standard for medical laboratory quality and competence, helping ensure reliable results for your doctor to review."],
 ];
 export const FAQ_DEFAULT_OPEN = 3;
 

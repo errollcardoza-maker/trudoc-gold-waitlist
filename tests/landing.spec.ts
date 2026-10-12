@@ -108,6 +108,8 @@ test('FAQ answers render **bold** phrases as bold text, with no stray asterisks'
   const faq = page.getByTestId('faq');
   await faq.getByRole('button', { name: 'What happens after I join the waitlist?' }).click();
   await expect(faq.locator('strong', { hasText: 'only be asked to make a payment' })).toBeVisible();
-  await expect(faq.locator('strong')).toHaveCount(3);
+  await expect(faq.locator('strong')).toHaveCount(4);
+  await expect(faq.locator('strong', { hasText: 'ISO 15189:2022' })).toBeAttached();
+  await expect(faq.getByRole('button')).toHaveCount(6);
   await expect(faq.getByText(/\*\*/)).toHaveCount(0);
 });
