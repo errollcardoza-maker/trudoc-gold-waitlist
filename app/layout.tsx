@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import localFont from 'next/font/local';
-import { TOTAL_BIOMARKERS } from '@/lib/content';
+import { CORE_BIOMARKERS } from '@/lib/content';
 import './globals.css';
 
 const figtree = localFont({
@@ -13,7 +13,7 @@ const figtree = localFont({
 });
 
 const description =
-  `Join the TruDoc Gold waitlist. ${TOTAL_BIOMARKERS} biomarkers tested twice a year, reviewed with a doctor, from AED 1/day at launch pricing.`;
+  `Join the TruDoc Gold waitlist. ${CORE_BIOMARKERS} biomarkers tested twice a year, reviewed with a doctor, from AED 1/day at launch pricing.`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'),
