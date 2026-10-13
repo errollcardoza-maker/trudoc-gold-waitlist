@@ -178,17 +178,17 @@ export const steps = [
   { img: '/assets/step5.png', title: 'Keep track of your progress', desc: 'Test again to see how your health is changing, and let your doctor refine your plan based on your latest results' },
 ];
 
-// Clinical risks that can be flagged from the test menu. Every marker below is on the menu
-// (core or annual). Cards show the first four markers and "+N" for the rest. These support risk
-// assessment; they don't confirm a diagnosis on their own (e.g. liver enzymes alone can't diagnose
-// fatty liver). \u2060 (word joiner) keeps hyphenated names like hs-CRP on one line.
+// Clinical risks that can be flagged from the test menu; every marker below is on the menu (core or
+// annual). Titles say "risk" where these tests can only flag a condition that needs other evidence to
+// diagnose (imaging, a repeat test, results lasting 3+ months). Cards show the first four markers and
+// "+N" for the rest. \u2060 (word joiner) keeps hyphenated names like hs-CRP on one line.
 type Risk = { title: string; markers: string[] };
 
 const risks: Risk[] = [
-  { title: 'Cardiovascular disease', markers: ['ApoB', 'LDL', 'Lipoprotein(a)', 'hs-\u2060CRP', 'non-\u2060HDL', 'triglycerides', '10-year heart risk (PREVENT)'] },
-  { title: 'Prediabetes & type 2 diabetes', markers: ['HbA1c', 'fasting glucose', 'fasting insulin', 'HOMA-\u2060IR', 'TyG index', 'estimated average glucose'] },
-  { title: 'Fatty liver disease', markers: ['ALT', 'AST', 'GGT', 'FIB-\u20604 score', 'triglycerides', 'AST/ALT ratio'] },
-  { title: 'Chronic kidney disease', markers: ['eGFR', 'uACR', 'creatinine', 'urine protein', 'urea (BUN)'] },
+  { title: 'Cardiovascular risk', markers: ['ApoB', 'LDL', 'Lipoprotein(a)', 'hs-\u2060CRP', 'non-\u2060HDL', 'triglycerides', '10-year heart risk (PREVENT)'] },
+  { title: 'Prediabetes & diabetes risk', markers: ['HbA1c', 'fasting glucose', 'fasting insulin', 'HOMA-\u2060IR', 'TyG index'] },
+  { title: 'Fatty liver risk', markers: ['ALT', 'AST', 'GGT', 'FIB-\u20604 score', 'triglycerides', 'AST/ALT ratio'] },
+  { title: 'Chronic kidney disease risk', markers: ['eGFR', 'uACR', 'creatinine', 'urine protein', 'urea (BUN)'] },
   { title: 'Hypothyroidism & hyperthyroidism', markers: ['TSH', 'Free T4'] },
   { title: 'Iron-deficiency anaemia', markers: ['haemoglobin', 'ferritin', 'transferrin saturation', 'MCV', 'serum iron', 'TIBC', 'RDW'] },
   { title: 'Vitamin B12 & folate deficiency', markers: ['vitamin B12', 'folate', 'MCV', 'haemoglobin', 'RDW'] },

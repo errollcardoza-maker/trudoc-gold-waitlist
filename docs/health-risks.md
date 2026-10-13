@@ -17,7 +17,7 @@ Source: `TruDoc_Gold_Test_Menu.xlsx` (core + annual panels). Each line is a dist
 
 ## Diabetes and metabolism
 10. Prediabetes: HbA1c, fasting glucose
-11. Type 2 diabetes: HbA1c, fasting glucose, eAG
+11. Diabetes-range result (type and diagnosis need confirming): HbA1c, fasting glucose, eAG
 12. Insulin resistance: HOMA-IR, TyG index, triglyceride/HDL ratio
 13. High fasting insulin (hyperinsulinaemia): fasting insulin
 14. Low blood sugar (hypoglycaemia): fasting glucose
