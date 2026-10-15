@@ -191,7 +191,7 @@ export const heroPrices = [
 ];
 
 export const steps = [
-  { img: '/assets/step1-113.png', title: `${BIOMARKERS_LABEL} biomarkers, tested at home`, desc: 'One comprehensive test covering key areas like heart, metabolism, hormones, liver, kidney and thyroid' },
+  { img: '/assets/step1-100plus.png', title: `${BIOMARKERS_LABEL} biomarkers, tested at home`, desc: 'One comprehensive test covering key areas like heart, metabolism, hormones, liver, kidney and thyroid' },
   { img: '/assets/step2-113.png', title: 'Your results, made easy to understand', desc: 'See your biomarkers in a simple, easy-to-read app report, with clear ranges showing what’s healthy and what needs attention' },
   { img: '/assets/step3-v2.png', title: 'A doctor by your side, always', desc: 'Talk through your results with a doctor who understands you and provides ongoing, personalised guidance whenever you need it' },
   { img: '/assets/step4.png', title: 'The right specialist when you need one', desc: 'If something needs a closer look, get connected with the right specialist for a more targeted plan' },
