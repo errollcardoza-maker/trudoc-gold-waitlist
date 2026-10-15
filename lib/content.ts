@@ -163,8 +163,8 @@ export const areas = areaDefs
     const parts = [included && plural(included, 'biomarker'), addOns && plural(addOns, 'paid add-on')].filter(Boolean);
     return { ...a, count: parts.join(' · ') };
   });
-/** Areas with at least one included test (used in "across N health areas"). */
-export const INCLUDED_AREAS = areaDefs.filter((a) => a.tags.some((t) => !t.addOn)).length;
+/** Health areas shown on the page (used in "across N health areas"), including add-on-only areas. */
+export const HEALTH_AREAS = areas.length;
 
 /** Every biomarker on the menu (core + annual); used in "We test N biomarkers" lines. */
 export const TOTAL_BIOMARKERS = areaDefs.reduce((n, a) => n + a.tags.filter((t) => !t.addOn).length, 0);
@@ -177,7 +177,7 @@ export const CORE_BIOMARKERS_LABEL = roundedPlus(CORE_BIOMARKERS);
 
 // Only biomarkers that are actually in the test panel.
 export const chipsA = ['Cholesterol', 'LDL', 'HDL', 'Triglycerides', 'Lipoprotein(a)', 'Glucose', 'HbA1c', 'Uric acid', 'ALT', 'GGT', 'eGFR'];
-export const chipsB = ['TSH', 'Free T4', 'Free T3', 'CRP', 'Hemoglobin', 'Vitamin D', 'Vitamin B12', 'Ferritin', 'Calcium', 'Creatinine', 'Platelets'];
+export const chipsB = ['TSH', 'Free T4', 'Free T3', 'CRP', 'Haemoglobin', 'Vitamin D', 'Vitamin B12', 'Ferritin', 'Calcium', 'Creatinine', 'Platelets'];
 
 export const heroFeatures = [
   { icon: '/assets/icons/usp-health-picture.svg', title: 'A clearer picture of your health for the years ahead', desc: `2 full-body health checks covering ${BIOMARKERS_LABEL} biomarkers.` },
@@ -186,8 +186,8 @@ export const heroFeatures = [
 ];
 
 export const heroPrices = [
-  { label: 'Individual', price: 'AED 1/ day', was: 'AED 2/ day' },
-  { label: 'Family of up to 4 adults', price: 'AED 2/ day', was: 'AED 4/ day' },
+  { label: 'Individual', price: 'AED 1/day', was: 'AED 2/day' },
+  { label: 'Family of up to 4 adults', price: 'AED 2/day', was: 'AED 4/day' },
 ];
 
 export const steps = [
@@ -235,14 +235,14 @@ export const doctors = [
   { name: 'Dr. Imaan Chowdhury', role: 'Specialist, American board certified', img: '/assets/doc-imaan.png', w: 378, h: 398 },
   { name: 'Dr. Maya El Khouri', role: 'Specialist, American board certified', img: '/assets/doc-maya.png', w: 480, h: 398 },
   { name: 'Dr. Mehryar Andacheh', role: 'GP certified, DHA licensed', img: '/assets/doc-mehryar.png', w: 398, h: 398 },
-  { name: 'Danya Taha', role: 'Nutrionist, DHA licensed', img: '/assets/doc-2.png', w: 374, h: 398 },
-  { name: 'Dr. Anas Abdul', role: 'GP certified, DOH licensed', img: '/assets/doc-5.png', w: 416, h: 400 },
+  { name: 'Danya Taha', role: 'Nutritionist, DHA licensed', img: '/assets/doc-2.png', w: 374, h: 398 },
+  { name: 'Dr. Anas Abdul', role: 'GP certified, DoH licensed', img: '/assets/doc-5.png', w: 416, h: 400 },
 ];
 
 export const plans = [
   { name: 'Gold Individual', sub: 'For you', amount: 'AED 1', badgeIcon: '/assets/icons/mug-g.svg', badge: 'Less than a cup of karak chai', billed: 'Billed annually at AED 365',
     features: [`${CORE_BIOMARKERS_LABEL} biomarkers tested 2 times a year`, 'Access to doctors & specialists', 'Spot potential health risks early', 'Personalised guidance for your health needs'], starBoxW: 194, star: '/assets/icons/star-1.svg' },
-  { name: 'Gold Family', sub: 'Up to 4 members above 18+ ', amount: 'AED 2', badgeIcon: '/assets/icons/badge-percent-g.svg', badge: 'AED 0.50 per member', billed: 'Billed annually at AED 730',
+  { name: 'Gold Family', sub: 'Up to 4 members aged 18+', amount: 'AED 2', badgeIcon: '/assets/icons/badge-percent-g.svg', badge: 'AED 0.50 per member', billed: 'Billed annually at AED 730',
     features: ['Everything in Individual, for each member', 'Separate results and plan for every person', 'One subscription, managed by you'], starBoxW: 204, star: '/assets/icons/star-2.svg' },
 ];
 
@@ -253,7 +253,7 @@ export const faqs: [string, string][] = [
   ["Who can I add to my Gold Family Plan?",
     "You can include up to **four members aged 18 or older** in your family plan. Each member gets access to their own health journey and the benefits included in Gold. Children under 18 cannot be added to the plan."],
   ["Are medicines and treatments included in TruDoc Gold?",
-    "No. Medicines and treatments are not included in the Gold membership fee. However, as a healthcare provider, TruDoc can help coordinate your care and guide you towards the appropriate treatment. If your insurance covers the prescribed medicines, tests or treatments, we can help you navigate the process, subject to your policy's terms and approvals."],
+    "No. Medicines and treatments are not included in the Gold membership fee. However, as a healthcare provider, TruDoc can help coordinate your care and guide you towards the appropriate treatment. If your insurance covers the prescribed medicines, tests or treatments, we can help you navigate the process, subject to your policy’s terms and approvals."],
   ["What happens if my health check-up results show a potential risk?",
     "Your doctor will review your results, explain what needs attention and help you understand the next steps. Where appropriate, you can access specialist consultations and a personalised care plan. Your second annual check-up helps you and your doctor track changes and assess your progress."],
   ["What happens after I join the waitlist?",

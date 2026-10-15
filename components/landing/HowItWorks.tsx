@@ -8,7 +8,7 @@ export function HowItWorks() {
       <section data-reveal="section" className="rounded-t-[28px] bg-white px-4 py-12 md:rounded-none md:px-(--side) md:py-28">
         <div className="flex flex-col gap-6 md:mx-auto md:max-w-[1280px] md:gap-12">
           <h2 className="m-0 text-2xl leading-[1.25] font-medium tracking-[-0.02em] whitespace-pre-wrap text-ink md:text-[40px] md:leading-[1.15] md:tracking-[-0.025em]">
-            <span className="text-muted">How it works?</span>
+            <span className="text-muted">How it works</span>
             {'\nComplete health picture'}
           </h2>
           <div className="flex flex-col gap-8 md:grid md:grid-cols-[repeat(auto-fill,minmax(360px,1fr))] md:gap-x-8 md:gap-y-12">

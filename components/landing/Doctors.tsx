@@ -29,7 +29,7 @@ export function Doctors() {
               {'Guided by doctors. \nProven by people.'}
             </h2>
             <p className="m-0 text-sm leading-5 font-normal whitespace-pre-wrap text-body md:text-[18px] md:leading-[1.5] md:whitespace-normal md:text-pretty">
-              {'Real experiences from people guided by \nDHA & DHO licensed TruDoc doctors'}
+              {'Real experiences from people guided by \nDHA & DoH licensed TruDoc doctors'}
             </p>
           </div>
 

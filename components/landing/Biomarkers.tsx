@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { BIOMARKERS_LABEL, INCLUDED_AREAS, areas } from '@/lib/content';
+import { BIOMARKERS_LABEL, HEALTH_AREAS, areas } from '@/lib/content';
 import { Icon } from '../Icon';
 
 const ease = 'cubic-bezier(0.2,0.8,0.2,1)';
@@ -15,7 +15,7 @@ export function Biomarkers() {
       <div className="flex flex-col gap-6 md:mx-auto md:grid md:max-w-[1280px] md:grid-cols-1 md:items-start md:gap-8 split:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] split:gap-20">
         <div className="split:sticky split:top-12">
           <h2 className="m-0 text-2xl leading-[1.25] font-medium tracking-[-0.02em] whitespace-pre-wrap text-ink md:text-[40px] md:leading-[1.15] md:tracking-[-0.025em] md:text-balance">
-            {`We test ${BIOMARKERS_LABEL} biomarkers \nacross ${INCLUDED_AREAS} health areas`}
+            {`We test ${BIOMARKERS_LABEL} biomarkers \nacross ${HEALTH_AREAS} health areas`}
           </h2>
         </div>
         <div

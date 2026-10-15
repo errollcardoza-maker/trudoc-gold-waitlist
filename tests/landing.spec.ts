@@ -96,7 +96,7 @@ test('Oct 12 change set: copy, phone, removed items', async ({ page }) => {
   // No risk card names a test that isn't on the v4 menu
   await expect(scroller.getByText(/ApoB|insulin|HOMA|uACR|testosterone|folate|hs-/)).toHaveCount(0);
   await expect(page.getByText('4.5 Rating').first()).toBeAttached();
-  await expect(page.getByText('GP certified, DOH licensed')).toBeAttached();
+  await expect(page.getByText('GP certified, DoH licensed')).toBeAttached();
   await expect(page.getByText('Personalised guidance for your health needs')).toBeAttached();
   // Footer toll-free number
   await expect(page.locator('a[href="tel:800878362"]').first()).toHaveText('800 878 362');
@@ -122,9 +122,9 @@ test('FAQ answers render **bold** phrases as bold text, with no stray asterisks'
   await expect(faq.getByText(/\*\*/)).toHaveCount(0);
 });
 
-test('test menu v4: 12 shown health areas, 104 biomarkers (101 core), counts derived', async ({ page }) => {
+test('test menu v4: 13 shown health areas, 104 biomarkers (101 core), counts derived', async ({ page }) => {
   const list = page.getByTestId('biomarkers');
-  await expect(page.getByRole('heading', { name: /We test 100\+ biomarkers\s+across 12 health areas/ })).toBeAttached();
+  await expect(page.getByRole('heading', { name: /We test 100\+ biomarkers\s+across 13 health areas/ })).toBeAttached();
   for (const [area, n] of [['Immunity & inflammation', 16], ['Urinary health', 19], ['Bone health', 2], ['Prostate health', 1], ['Biological age', 2]] as const)
     await expect(list.getByRole('button', { name: new RegExp(`^${area}\\s*${n} biomarkers?$`) })).toBeAttached();
   // Paid add-ons are listed and tagged but kept out of every count
