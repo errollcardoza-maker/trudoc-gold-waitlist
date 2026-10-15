@@ -45,7 +45,7 @@ test('FAQ: "What happens if my health check-up results show a potential risk?" i
   await expect(q3).toHaveAttribute('aria-expanded', 'false');
 
   // Tapping the answer text (not just the question) also toggles, as in the prototype.
-  await faq.getByText(/^Health insurance helps cover eligible/).click();
+  await faq.getByText(/^Health insurance often covers tests/).click();
   await expect(faq.locator('button[aria-expanded="true"]')).toHaveCount(0);
 });
 
@@ -86,13 +86,15 @@ test.describe('mobile layout snapshot', () => {
 
 test('Oct 12 change set: copy, phone, removed items', async ({ page }) => {
   // Hero feature #2, How it works step 2, conditions and doctors copy
-  await expect(page.getByText('A doctor and specialist by your side, always').first()).toBeAttached();
+  await expect(page.getByText('Doctors and specialists for lifelong wellbeing', { exact: true }).first()).toBeAttached();
   await expect(page.getByText('A doctor by your side, always', { exact: true })).toBeAttached();
-  for (const t of ['Cardiovascular risk', 'Iron-deficiency anaemia', 'Low testosterone (men)']) await expect(page.getByText(t, { exact: true }).first()).toBeAttached();
+  for (const t of ['Cardiovascular risk', 'Iron-deficiency anaemia', 'Vitamin D deficiency']) await expect(page.getByText(t, { exact: true }).first()).toBeAttached();
   const scroller = page.getByTestId('conditions-scroller');
   await expect(scroller.getByText(/^Tracked through/)).toHaveCount(8);
-  await expect(scroller.getByText(/^Tracked through ApoB, LDL, Lipoprotein\(a\), hs-\u2060CRP \+3$/)).toBeAttached();
-  await expect(scroller.getByText('Tracked through TSH and Free T4', { exact: true })).toBeAttached();
+  await expect(scroller.getByText(/^Tracked through LDL, non-\u2060HDL, Lipoprotein\(a\), triglycerides \+3$/)).toBeAttached();
+  await expect(scroller.getByText('Tracked through TSH, Free T4 and Free T3', { exact: true })).toBeAttached();
+  // No risk card names a test that isn't on the v4 menu
+  await expect(scroller.getByText(/ApoB|insulin|HOMA|uACR|testosterone|folate|hs-/)).toHaveCount(0);
   await expect(page.getByText('4.5 Rating').first()).toBeAttached();
   await expect(page.getByText('GP certified, DOH licensed')).toBeAttached();
   await expect(page.getByText('Personalised guidance for your health needs')).toBeAttached();
@@ -103,6 +105,9 @@ test('Oct 12 change set: copy, phone, removed items', async ({ page }) => {
   await expect(page.getByText('Split your payment with')).toHaveCount(0);
   await expect(page.locator('img[src*="human.png"], img[src*="tabby"], img[src*="tamara"]')).toHaveCount(0);
   await expect(page.getByText('Blood Pressure')).toHaveCount(0);
+  // Hero chips name tested markers only (v4)
+  const hero = page.locator('section').filter({ has: page.getByRole('heading', { name: 'Make proactive healthcare simple.' }) });
+  for (const gone of ['ApoB', 'Insulin', 'Testosterone', 'Cortisol', 'Homocysteine', 'Magnesium']) await expect(hero.getByText(gone, { exact: true })).toHaveCount(0);
   // New hero art
   await expect(page.locator('img[src*="test-tube.png"]').first()).toBeAttached();
 });
@@ -111,33 +116,39 @@ test('FAQ answers render **bold** phrases as bold text, with no stray asterisks'
   const faq = page.getByTestId('faq');
   await faq.getByRole('button', { name: 'What happens after I join the waitlist?' }).click();
   await expect(faq.locator('strong', { hasText: 'only be asked to make a payment' })).toBeVisible();
-  await expect(faq.locator('strong')).toHaveCount(4);
+  await expect(faq.locator('strong')).toHaveCount(3);
   await expect(faq.locator('strong', { hasText: 'ISO 15189:2022' })).toBeAttached();
   await expect(faq.getByRole('button')).toHaveCount(6);
   await expect(faq.getByText(/\*\*/)).toHaveCount(0);
 });
 
-test('test menu: 13 health areas, 113 biomarkers (102 core), counts derived', async ({ page }) => {
+test('test menu v4: 12 shown health areas, 104 biomarkers (101 core), counts derived', async ({ page }) => {
   const list = page.getByTestId('biomarkers');
-  await expect(page.getByRole('heading', { name: /We test 113 biomarkers\s+across 13 health areas/ })).toBeAttached();
-  for (const [area, n] of [['Blood health', 18], ['Immunity & inflammation', 16], ['Urinary health', 19], ['Bone health', 4], ['Prostate health', 1], ['Biological age', 2]] as const)
+  await expect(page.getByRole('heading', { name: /We test 100\+ biomarkers\s+across 12 health areas/ })).toBeAttached();
+  for (const [area, n] of [['Immunity & inflammation', 16], ['Urinary health', 19], ['Bone health', 2], ['Prostate health', 1], ['Biological age', 2]] as const)
     await expect(list.getByRole('button', { name: new RegExp(`^${area}\\s*${n} biomarkers?$`) })).toBeAttached();
+  // Paid add-ons are listed and tagged but kept out of every count
+  await expect(list.getByRole('button', { name: /^Blood health\s*19 biomarkers$/ })).toBeAttached();
+  await expect(page.getByText(/ABO blood group|Rh factor/)).toHaveCount(0);
+  await expect(list.getByRole('button', { name: /^Hormonal health\s*3 paid add-ons$/ })).toBeAttached();
+  await list.getByRole('button', { name: /^Hormonal health/ }).click();
+  await expect(page.locator('#area-panel-hormones').getByText('Paid add-on', { exact: true })).toHaveCount(3);
   await expect(list.getByRole('button')).toHaveCount(13);
   // Frequency notes aren't shown, just the one-line explanation
   await list.getByRole('button', { name: /^Prostate health/ }).click();
   await expect(page.locator('#area-panel-prostate').getByText('A protein that helps screen for prostate problems')).toBeVisible();
   await expect(list.getByText(/Once a year|Once, when you join/)).toHaveCount(0);
   // Twice-a-year claims use the core count
-  await expect(page.getByText('102 biomarkers tested 2 times a year')).toBeAttached();
-  await expect(page.getByText(/(50\+|59) biomarkers/)).toHaveCount(0);
+  await expect(page.getByText('100+ biomarkers tested 2 times a year')).toBeAttached();
+  await expect(page.getByText(/(50\+|59|101|104|113) biomarkers/)).toHaveCount(0);
 });
 
-test('risks section ends with a tall "90+" summary card spanning both rows, with a disclaimer', async ({ page }) => {
+test('risks section ends with a tall "80+" summary card spanning both rows, with a disclaimer', async ({ page }) => {
   const box = page.getByTestId('risks-summary');
-  await expect(box).toContainText('90+');
+  await expect(box).toContainText('80+');
   await expect(box).toContainText('Health risks we can help you spot early');
   await expect(box).toContainText('not a diagnosis');
-  const cards = page.getByTestId('conditions-scroller').locator('.rounded-xl').filter({ hasNot: page.getByText('90+') });
+  const cards = page.getByTestId('conditions-scroller').locator('.rounded-xl').filter({ hasNot: page.getByText('80+') });
   const top = await cards.first().boundingBox();
   const bottom = await cards.nth(4).boundingBox(); // first card of row 2
   const b = await box.boundingBox();

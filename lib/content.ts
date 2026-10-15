@@ -1,10 +1,19 @@
 // All site copy and data: from the prototypes, plus later product-approved updates
 // (see READBACK.md). Biomarker counts are derived from the lists below, never typed by hand.
 
-export type Biomarker = { name: string; desc: string; /** Annual/once-only tests, e.g. "Once a year · Men". Not shown on the site; omitted = core panel (twice a year), used for CORE_BIOMARKERS */ note?: string };
+export type Biomarker = {
+  name: string;
+  desc: string;
+  /** Annual/once-only tests, e.g. "Once a year · Men". Not shown on the site; omitted = core panel (twice a year), used for CORE_BIOMARKERS */
+  note?: string;
+  /** Not included in the membership (v4 'Include = N'); shown with a "Paid add-on" tag and left out of every count. */
+  addOn?: boolean;
+};
 export type HealthArea = { id: string; name: string; icon: string; tags: Biomarker[] };
 
-// Source: TruDoc_Gold_Test_Menu.xlsx (Core 2x a year + Annual 1x a year), grouped into the 13 health areas.
+// Source: TruDoc_Gold_Test_Menu_v4.xlsx: core 2x a year + annual tests with Include = Y, plus the annual
+// 'Include = N' tests shown as paid add-ons (addOn), grouped into the health areas. Blood group / Rh
+// typing is left out: it identifies blood type rather than measuring health.
 const areaDefs: HealthArea[] = [
   { id: 'blood', name: 'Blood health', icon: 'bio-blood', tags: [
     { name: 'Red blood cells (RBC)', desc: 'How many oxygen-carrying red cells are in your blood' },
@@ -18,13 +27,14 @@ const areaDefs: HealthArea[] = [
     { name: 'Platelets', desc: 'Cells that help your blood clot' },
     { name: 'MPV (mean platelet volume)', desc: 'The average size of your platelets' },
     { name: 'PDW (platelet distribution width)', desc: 'How much your platelets vary in size' },
+    { name: 'Plateletcrit (PCT)', desc: 'The share of your blood taken up by platelets' },
+    { name: 'Nucleated red blood cells (NRBC)', desc: 'Immature red cells that aren’t usually found in adult blood' },
+    { name: 'NRBC (absolute count)', desc: 'The number of immature red cells in your blood' },
     { name: 'Ferritin', desc: 'Shows how much iron your body has stored' },
     { name: 'Iron', desc: 'The iron in your blood right now, used to carry oxygen' },
     { name: 'TIBC (total iron-binding capacity)', desc: 'How much iron your blood is able to carry' },
     { name: 'UIBC (unsaturated iron-binding capacity)', desc: 'The spare capacity your blood has to carry more iron' },
     { name: 'Transferrin saturation', desc: 'How much of your blood’s iron-carrying capacity is in use' },
-    { name: 'ABO blood group', desc: 'Your blood type: A, B, AB or O', note: 'Once, when you join' },
-    { name: 'Rh factor', desc: 'Whether your blood type is positive or negative', note: 'Once, when you join' },
   ] },
   { id: 'heart', name: 'Heart health', icon: 'bio-heart', tags: [
     { name: 'Total cholesterol', desc: 'The overall amount of cholesterol in your blood' },
@@ -34,9 +44,10 @@ const areaDefs: HealthArea[] = [
     { name: 'Triglycerides', desc: 'Fats in your blood, often raised by sugar, alcohol and extra weight' },
     { name: 'VLDL', desc: 'Cholesterol carried in triglyceride-rich particles' },
     { name: 'Remnant cholesterol', desc: 'Leftover cholesterol linked to heart risk, even when LDL looks normal' },
+    { name: 'ApoB', desc: 'Counts the particles that carry cholesterol into artery walls', addOn: true },
     { name: 'Total cholesterol / HDL ratio', desc: 'A simple ratio that sums up your cholesterol balance' },
+    { name: 'LDL / HDL ratio', desc: 'Compares your “bad” cholesterol with your “good” cholesterol' },
     { name: 'Triglyceride / HDL ratio', desc: 'A ratio that can hint at insulin resistance' },
-    { name: 'ApoB', desc: 'Counts the particles that carry cholesterol into artery walls' },
     { name: '10-year heart risk (PREVENT)', desc: 'Your estimated risk of a heart attack or stroke over the next 10 years' },
     { name: 'Lipoprotein(a)', desc: 'An inherited type of cholesterol linked to heart disease', note: 'Once, when you join' },
   ] },
@@ -44,19 +55,18 @@ const areaDefs: HealthArea[] = [
     { name: 'Fasting glucose', desc: 'Measures blood sugar levels after an overnight fast' },
     { name: 'HbA1c', desc: 'Measures average blood sugar over the past 2–3 months' },
     { name: 'Estimated average glucose (eAG)', desc: 'Your HbA1c shown in everyday blood sugar units' },
-    { name: 'Fasting insulin', desc: 'Measures insulin levels after an overnight fast' },
-    { name: 'HOMA-IR', desc: 'An estimate of how well your body responds to insulin' },
     { name: 'TyG index', desc: 'Another estimate of insulin resistance, from triglycerides and glucose' },
   ] },
   { id: 'thyroid', name: 'Thyroid health', icon: 'bio-thyroid', tags: [
     { name: 'TSH', desc: 'The signal your brain sends to tell your thyroid how hard to work' },
     { name: 'Free T4', desc: 'The main hormone your thyroid makes' },
+    { name: 'Free T3', desc: 'The active thyroid hormone that drives your energy and metabolism' },
   ] },
+  // v4: the testosterone panel isn't included (symptom-triggered); offered as a paid add-on.
   { id: 'hormones', name: 'Hormonal health', icon: 'bio-hormones', tags: [
-    { name: 'Total testosterone', desc: 'A key hormone for energy, muscle, mood and sex drive', note: 'Once a year · Men' },
-    { name: 'SHBG', desc: 'A protein that controls how much of your sex hormones your body can use', note: 'Once a year · Men' },
-    { name: 'Free testosterone', desc: 'The testosterone that’s free for your body to use', note: 'Once a year · Men' },
-    { name: 'Bioavailable testosterone', desc: 'Testosterone that’s available to your tissues', note: 'Once a year · Men' },
+    { name: 'Total testosterone', desc: 'A key hormone for energy, muscle, mood and sex drive', addOn: true },
+    { name: 'SHBG', desc: 'A protein that controls how much of your sex hormones your body can use', addOn: true },
+    { name: 'Free testosterone', desc: 'The testosterone that’s free for your body to use', addOn: true },
   ] },
   { id: 'liver', name: 'Liver health', icon: 'bio-liver', tags: [
     { name: 'ALT', desc: 'A liver enzyme that rises when liver cells are stressed' },
@@ -75,12 +85,10 @@ const areaDefs: HealthArea[] = [
   ] },
   { id: 'kidney', name: 'Kidney health', icon: 'bio-kidney', tags: [
     { name: 'Creatinine', desc: 'A waste product your kidneys filter out of your blood' },
-    { name: 'Urea (BUN)', desc: 'Waste from protein breakdown, cleared by your kidneys' },
+    { name: 'Urea', desc: 'Waste from protein breakdown, cleared by your kidneys' },
+    { name: 'BUN (blood urea nitrogen)', desc: 'The nitrogen in urea, used to track kidney function and hydration' },
     { name: 'eGFR', desc: 'An estimate of how well your kidneys are filtering' },
     { name: 'BUN / creatinine ratio', desc: 'Helps tell dehydration apart from a kidney cause' },
-    { name: 'Urine albumin', desc: 'The amount of albumin protein in your urine' },
-    { name: 'Urine creatinine', desc: 'Corrects your urine results for how concentrated your urine is' },
-    { name: 'Urine albumin:creatinine (uACR)', desc: 'Checks for protein leaking into your urine, an early sign of kidney stress' },
     { name: 'Uric acid', desc: 'A waste product that can cause gout and kidney stones when high' },
     { name: 'Sodium', desc: 'Balances fluid in your body and supports your nerves' },
     { name: 'Potassium', desc: 'Keeps your heartbeat and muscles working properly' },
@@ -91,8 +99,6 @@ const areaDefs: HealthArea[] = [
   { id: 'bone', name: 'Bone health', icon: 'bio-bone', tags: [
     { name: 'Calcium', desc: 'Keeps your bones, muscles and nerves working' },
     { name: 'Corrected calcium', desc: 'Your calcium level adjusted for the protein that carries it' },
-    { name: 'Phosphorus', desc: 'Works with calcium to build bones and make energy' },
-    { name: 'Magnesium', desc: 'A mineral for muscles, nerves, sleep and heart rhythm' },
   ] },
   { id: 'immunity', name: 'Immunity & inflammation', icon: 'bio-immunity', tags: [
     { name: 'White blood cells (WBC)', desc: 'Counts your white blood cells, which fight infection' },
@@ -106,11 +112,11 @@ const areaDefs: HealthArea[] = [
     { name: 'Eosinophils (absolute count)', desc: 'The number of eosinophils in your blood' },
     { name: 'Basophils (%)', desc: 'The share of rare white cells that release histamine in allergies' },
     { name: 'Basophils (absolute count)', desc: 'The number of basophils in your blood' },
-    { name: 'Immature granulocytes (%)', desc: 'Young white cells that can rise with infection or inflammation' },
-    { name: 'Immature granulocytes (absolute count)', desc: 'The number of immature granulocytes in your blood' },
+    { name: 'Early granulocytes (%)', desc: 'Young white cells that can rise with infection or inflammation' },
+    { name: 'Early granulocytes (absolute count)', desc: 'The number of early granulocytes in your blood' },
     { name: 'Neutrophil-to-lymphocyte ratio (NLR)', desc: 'A ratio that reflects inflammation across your body' },
     { name: 'Platelet-to-lymphocyte ratio (PLR)', desc: 'Another ratio linked to inflammation in your body' },
-    { name: 'hs-CRP', desc: 'Picks up low-level inflammation linked to heart disease' },
+    { name: 'CRP (C-reactive protein)', desc: 'Picks up inflammation in your body' },
   ] },
   { id: 'urinary', name: 'Urinary health', icon: 'bio-urinary', tags: [
     { name: 'Colour', desc: 'The colour of your urine, a clue to how hydrated you are' },
@@ -134,9 +140,8 @@ const areaDefs: HealthArea[] = [
     { name: 'Yeast', desc: 'Checks for a fungal infection' },
   ] },
   { id: 'vitamins', name: 'Vitamins', icon: 'bio-nutrients', tags: [
-    { name: 'Vitamin D', desc: 'Supports strong bones, immunity and mood', note: 'Once a year' },
-    { name: 'Vitamin B12', desc: 'Needed for energy, nerves and making red blood cells', note: 'Once a year' },
-    { name: 'Folate', desc: 'A B vitamin that helps your body make new cells', note: 'Once a year' },
+    { name: 'Vitamin D', desc: 'Supports strong bones, immunity and mood' },
+    { name: 'Vitamin B12', desc: 'Needed for energy, nerves and making red blood cells', note: 'Once a year · if at risk (e.g. metformin, vegetarian diet)' },
   ] },
   { id: 'prostate', name: 'Prostate health', icon: 'bio-prostate', tags: [
     { name: 'PSA', desc: 'A protein that helps screen for prostate problems', note: 'Once a year · Men 50+' },
@@ -148,21 +153,36 @@ const areaDefs: HealthArea[] = [
 ];
 
 /** Each area's count ("18 biomarkers") is derived from its list, so it can't drift. */
-export const areas = areaDefs.map((a) => ({ ...a, count: `${a.tags.length} biomarker${a.tags.length === 1 ? '' : 's'}` }));
+const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
+/** Header counts, e.g. "11 biomarkers · 1 paid add-on"; areas with nothing to show are hidden. */
+export const areas = areaDefs
+  .filter((a) => a.tags.length)
+  .map((a) => {
+    const included = a.tags.filter((t) => !t.addOn).length;
+    const addOns = a.tags.length - included;
+    const parts = [included && plural(included, 'biomarker'), addOns && plural(addOns, 'paid add-on')].filter(Boolean);
+    return { ...a, count: parts.join(' · ') };
+  });
+/** Areas with at least one included test (used in "across N health areas"). */
+export const INCLUDED_AREAS = areaDefs.filter((a) => a.tags.some((t) => !t.addOn)).length;
 
 /** Every biomarker on the menu (core + annual); used in "We test N biomarkers" lines. */
-export const TOTAL_BIOMARKERS = areaDefs.reduce((n, a) => n + a.tags.length, 0);
+export const TOTAL_BIOMARKERS = areaDefs.reduce((n, a) => n + a.tags.filter((t) => !t.addOn).length, 0);
 /** Core panel only (no note): the biomarkers tested twice a year. */
-export const CORE_BIOMARKERS = areaDefs.reduce((n, a) => n + a.tags.filter((t) => !t.note).length, 0);
+export const CORE_BIOMARKERS = areaDefs.reduce((n, a) => n + a.tags.filter((t) => !t.note && !t.addOn).length, 0);
+/** Headline labels: rounded down to the nearest 10 so they never overstate (104 → "100+", 101 → "100+"). */
+const roundedPlus = (n: number) => `${Math.floor(n / 10) * 10}+`;
+export const BIOMARKERS_LABEL = roundedPlus(TOTAL_BIOMARKERS);
+export const CORE_BIOMARKERS_LABEL = roundedPlus(CORE_BIOMARKERS);
 
 // Only biomarkers that are actually in the test panel.
-export const chipsA = ['Cholesterol', 'LDL', 'HDL', 'ApoB', 'Lipoprotein(a)', 'Glucose', 'HbA1c', 'Insulin', 'Uric acid', 'ALT', 'eGFR'];
-export const chipsB = ['TSH', 'Free T4', 'Testosterone', 'Cortisol', 'hs-CRP', 'Homocysteine', 'Hemoglobin', 'Vitamin D', 'Vitamin B12', 'Ferritin', 'Magnesium'];
+export const chipsA = ['Cholesterol', 'LDL', 'HDL', 'Triglycerides', 'Lipoprotein(a)', 'Glucose', 'HbA1c', 'Uric acid', 'ALT', 'GGT', 'eGFR'];
+export const chipsB = ['TSH', 'Free T4', 'Free T3', 'CRP', 'Hemoglobin', 'Vitamin D', 'Vitamin B12', 'Ferritin', 'Calcium', 'Creatinine', 'Platelets'];
 
 export const heroFeatures = [
-  { icon: '/assets/icons/test-tube-y.svg', title: '2 full-body tests in a year', desc: `${TOTAL_BIOMARKERS} biomarkers tested without relying on\ninsurance coverage` },
-  { icon: '/assets/icons/user-md-y.svg', title: 'A doctor and specialist by your side, always', desc: 'Get ongoing support from doctors and specialists for\nwhatever your health needs' },
-  { icon: '/assets/icons/risk-y.svg', title: 'Spot health risks early', desc: 'Track chronic-risk markers and understand changes\nin your health over time' },
+  { icon: '/assets/icons/usp-health-picture.svg', title: 'A clearer picture of your health for the years ahead', desc: `2 full-body health checks covering ${BIOMARKERS_LABEL} biomarkers.` },
+  { icon: '/assets/icons/usp-doctors.svg', title: 'Doctors and specialists for lifelong wellbeing', desc: 'Personalised guidance to support your long-term health.' },
+  { icon: '/assets/icons/usp-spot-risks.svg', title: 'Spot health risks early. Protect your future wellbeing.', desc: 'Track key markers and take proactive steps for your health.' },
 ];
 
 export const heroPrices = [
@@ -171,7 +191,7 @@ export const heroPrices = [
 ];
 
 export const steps = [
-  { img: '/assets/step1-113.png', title: `${TOTAL_BIOMARKERS} biomarkers, tested at home`, desc: 'One comprehensive test covering key areas like heart, metabolism, hormones, liver, kidney and thyroid' },
+  { img: '/assets/step1-113.png', title: `${BIOMARKERS_LABEL} biomarkers, tested at home`, desc: 'One comprehensive test covering key areas like heart, metabolism, hormones, liver, kidney and thyroid' },
   { img: '/assets/step2-113.png', title: 'Your results, made easy to understand', desc: 'See your biomarkers in a simple, easy-to-read app report, with clear ranges showing what’s healthy and what needs attention' },
   { img: '/assets/step3-v2.png', title: 'A doctor by your side, always', desc: 'Talk through your results with a doctor who understands you and provides ongoing, personalised guidance whenever you need it' },
   { img: '/assets/step4.png', title: 'The right specialist when you need one', desc: 'If something needs a closer look, get connected with the right specialist for a more targeted plan' },
@@ -185,14 +205,14 @@ export const steps = [
 type Risk = { title: string; markers: string[] };
 
 const risks: Risk[] = [
-  { title: 'Cardiovascular risk', markers: ['ApoB', 'LDL', 'Lipoprotein(a)', 'hs-\u2060CRP', 'non-\u2060HDL', 'triglycerides', '10-year heart risk (PREVENT)'] },
-  { title: 'Prediabetes & diabetes risk', markers: ['HbA1c', 'fasting glucose', 'fasting insulin', 'HOMA-\u2060IR', 'TyG index'] },
+  { title: 'Cardiovascular risk', markers: ['LDL', 'non-\u2060HDL', 'Lipoprotein(a)', 'triglycerides', 'HDL', 'remnant cholesterol', '10-year heart risk (PREVENT)'] },
+  { title: 'Prediabetes & diabetes risk', markers: ['HbA1c', 'fasting glucose', 'TyG index', 'triglyceride/HDL ratio'] },
   { title: 'Fatty liver risk', markers: ['ALT', 'AST', 'GGT', 'FIB-\u20604 score', 'triglycerides', 'AST/ALT ratio'] },
-  { title: 'Chronic kidney disease risk', markers: ['eGFR', 'uACR', 'creatinine', 'urine protein', 'urea (BUN)'] },
-  { title: 'Hypothyroidism & hyperthyroidism', markers: ['TSH', 'Free T4'] },
+  { title: 'Chronic kidney disease risk', markers: ['eGFR', 'creatinine', 'urine protein', 'urea', 'BUN/creatinine ratio'] },
+  { title: 'Hypothyroidism & hyperthyroidism', markers: ['TSH', 'Free T4', 'Free T3'] },
   { title: 'Iron-deficiency anaemia', markers: ['haemoglobin', 'ferritin', 'transferrin saturation', 'MCV', 'serum iron', 'TIBC', 'RDW'] },
-  { title: 'Vitamin B12 & folate deficiency', markers: ['vitamin B12', 'folate', 'MCV', 'haemoglobin', 'RDW'] },
-  { title: 'Low testosterone (men)', markers: ['total testosterone', 'free testosterone', 'SHBG', 'bioavailable testosterone'] },
+  { title: 'Vitamin B12 deficiency', markers: ['vitamin B12', 'MCV', 'haemoglobin', 'RDW'] },
+  { title: 'Vitamin D deficiency', markers: ['vitamin D', 'calcium', 'corrected calcium', 'ALP'] },
 ];
 
 /** "Tracked through A, B, C, D +N" (or "A, B and C" when there are four or fewer). */
@@ -203,8 +223,8 @@ function trackedThrough(m: string[]): string {
 
 const riskCards = risks.map((r) => ({ title: r.title, desc: trackedThrough(r.markers) }));
 /** Distinct risks the menu can flag, enumerated in docs/health-risks.md (needs medical sign-off). */
-export const HEALTH_RISKS_FLAGGED = 91;
-/** Rounded down to the nearest 10 for the headline, so it never overstates: 91 → "90+". */
+export const HEALTH_RISKS_FLAGGED = 81;
+/** Rounded down to the nearest 10 for the headline, so it never overstates: 81 → "80+". */
 export const HEALTH_RISKS_LABEL = `${Math.floor(HEALTH_RISKS_FLAGGED / 10) * 10}+`;
 
 // Mobile shows two scrolling rows; desktop concatenates them into one grid.
@@ -221,7 +241,7 @@ export const doctors = [
 
 export const plans = [
   { name: 'Gold Individual', sub: 'For you', amount: 'AED 1', badgeIcon: '/assets/icons/mug-g.svg', badge: 'Less than a cup of karak chai', billed: 'Billed annually at AED 365',
-    features: [`${CORE_BIOMARKERS} biomarkers tested 2 times a year`, 'Access to doctors & specialists', 'Spot potential health risks early', 'Personalised guidance for your health needs'], starBoxW: 194, star: '/assets/icons/star-1.svg' },
+    features: [`${CORE_BIOMARKERS_LABEL} biomarkers tested 2 times a year`, 'Access to doctors & specialists', 'Spot potential health risks early', 'Personalised guidance for your health needs'], starBoxW: 194, star: '/assets/icons/star-1.svg' },
   { name: 'Gold Family', sub: 'Up to 4 members above 18+ ', amount: 'AED 2', badgeIcon: '/assets/icons/badge-percent-g.svg', badge: 'AED 0.50 per member', billed: 'Billed annually at AED 730',
     features: ['Everything in Individual, for each member', 'Separate results and plan for every person', 'One subscription, managed by you'], starBoxW: 204, star: '/assets/icons/star-2.svg' },
 ];
@@ -229,7 +249,7 @@ export const plans = [
 // Answers may contain **bold** spans (rendered by components/landing/Faq.tsx).
 export const faqs: [string, string][] = [
   ["How is TruDoc Gold different from health insurance?",
-    "Health insurance helps cover eligible healthcare expenses, subject to your policy. TruDoc Gold focuses on proactive health management, with **two comprehensive health check-ups every year, regardless of whether you have a diagnosed condition**. You also get access to doctors and specialists who can help you act on your results, followed by a repeat check-up to track your progress."],
+    `Health insurance often covers tests based on a diagnosed condition and your policy’s approval criteria. With TruDoc Gold, you don’t have to wait for a diagnosis to take a proactive approach to your health. Get two comprehensive health check-ups every year covering ${BIOMARKERS_LABEL} biomarkers, personalised insights into your health, and access to doctors and specialists to guide your next steps. A repeat check-up helps you track changes over time and understand how your health is progressing.`],
   ["Who can I add to my Gold Family Plan?",
     "You can include up to **four members aged 18 or older** in your family plan. Each member gets access to their own health journey and the benefits included in Gold. Children under 18 cannot be added to the plan."],
   ["Are medicines and treatments included in TruDoc Gold?",
