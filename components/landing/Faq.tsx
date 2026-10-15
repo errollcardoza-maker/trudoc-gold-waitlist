@@ -62,7 +62,7 @@ export function Faq() {
                       >
                         <div className="min-h-0 overflow-hidden">
                           <span
-                            className="block pt-1 text-xs leading-[1.5] font-normal text-body md:max-w-[640px] md:pt-2.5 md:text-[16px] md:leading-[1.6] md:text-pretty"
+                            className="block pt-1 text-[13px] leading-[1.5] font-normal text-body md:max-w-[640px] md:pt-2.5 md:text-[16px] md:leading-[1.6] md:text-pretty"
                             style={{ transition: `transform 0.36s ${ease}`, transform: `translateY(${open ? 0 : -6}px)` }}
                           >
                             {withBold(a)}
