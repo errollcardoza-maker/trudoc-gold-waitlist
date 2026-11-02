@@ -133,7 +133,7 @@ html.td-intro .lp-step:not(.in) .lp-step-badge { transform: scale(.85); }
 .lp-tl-card .bg { position: absolute; max-width: none; object-fit: cover; transition: transform 1.6s var(--ease-out); }
 html.td-intro .lp-tl-card:not(.c1):not(.in) .bg { transform: scale(1.06); }
 .c1 .bg, .c2 .bg, .c4 .bg { left: 0; top: 0; width: 311px; height: 200px; }
-.c3 .bg { left: -17px; top: -9px; width: 360px; height: 253px; object-fit: fill; object-position: bottom; }
+.c3 .bg { left: 0; top: 0; width: 311px; height: 200px; object-position: 30% 50%; }
 .c5 .bg { left: 0; top: -5px; width: 343px; height: 343px; }
 
 /* Card 1: static chips + "100+ Biomarkers" */

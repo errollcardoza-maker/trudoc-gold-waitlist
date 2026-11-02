@@ -126,7 +126,7 @@ function RiskRow({ icon, label, high }: { icon: string; label: string; high: boo
 function Card3() {
   return (
     <div className="lp-tl-card c3">
-      <Image className="bg" src={A('tl-doctor-bg.png')} alt="" width={360} height={253} sizes="(min-width: 768px) 720px, calc((100vw - 64px) * 1.16)" />
+      <Image className="bg" src={A('tl-doctor-v2.png')} alt="" width={670} height={381} sizes="(min-width: 768px) 622px, calc(100vw - 64px)" />
       <div className="lp-c3-col" aria-hidden="true">
         <div className="lp-glass ba">
           <p className="lbl">Biological Age</p>
