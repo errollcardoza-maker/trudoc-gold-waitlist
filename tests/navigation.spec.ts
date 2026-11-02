@@ -9,8 +9,8 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('form expands out of the CTA button', async ({ page }) => {
-  const cta = await page.getByTestId('join-cta').boundingBox();
-  await page.getByTestId('join-cta').click();
+  const cta = await page.getByTestId('hero-join').boundingBox();
+  await page.getByTestId('hero-join').click();
   const anim = await form(page).evaluate((el) => ({
     animation: el.style.animation,
     top: el.style.getPropertyValue('--ex-t'),
@@ -34,7 +34,7 @@ for (const via of ['back button', 'browser back'] as const) {
     await expect(form(page)).toHaveCSS('position', 'fixed');
     await expect(form(page)).toHaveCSS('pointer-events', 'none');
     expect(await form(page).evaluate((el) => el.style.animation)).toContain('tdCollapse');
-    await expect(page.getByTestId('join-cta')).toBeAttached();
+    await expect(page.getByTestId('hero-join')).toBeAttached();
 
     await expect(form(page)).toHaveCount(0, { timeout: 2000 }); // unmounted after ~560ms
     await expect(page).toHaveURL(/\/$/);
@@ -52,7 +52,7 @@ test('browser forward re-opens the form', async ({ page }) => {
 
 test('intro reveal plays on first load only', async ({ page }) => {
   await expect(page.locator('html')).toHaveClass(/td-intro/);
-  await expect(page.locator('[data-reveal="hero"]').first()).toHaveAttribute('data-shown', '');
+  await expect(page.locator('.lp-hero-title')).toHaveCSS('animation-name', 'lpRise');
   await openForm(page);
   await page.getByRole('button', { name: 'Back' }).click();
   await expect(page.locator('html')).not.toHaveClass(/td-intro/);
@@ -64,9 +64,9 @@ test.describe('reduced motion', () => {
   test('skips the intro and all transitions', async ({ page }) => {
     await expect(page.locator('html')).not.toHaveClass(/td-intro/);
     const h1 = page.getByRole('heading', { name: 'Make proactive healthcare simple.' });
-    expect(await h1.evaluate((el) => getComputedStyle(el.closest('[data-reveal]')!).opacity)).toBe('1');
-    const marquee = await page.locator('.marquee-l').first().evaluate((el) => getComputedStyle(el).animationName);
-    expect(marquee).toBe('none');
+    expect(await h1.evaluate((el) => getComputedStyle(el).opacity)).toBe('1');
+    expect(await h1.evaluate((el) => getComputedStyle(el).animationName)).toBe('none');
+    await expect(page.locator('.lp-sheen')).toBeHidden();
 
     await openForm(page);
     await page.getByRole('button', { name: 'Back' }).click();

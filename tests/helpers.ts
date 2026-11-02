@@ -12,8 +12,11 @@ export async function withFreshIp(page: Page) {
   await page.setExtraHTTPHeaders({ 'x-forwarded-for': randomIp() });
 }
 
+/** Opens the form from whichever CTA is on screen: the hero's button, or the sticky bar once it has slid in. */
 export async function openForm(page: Page) {
-  await page.getByTestId('join-cta').click();
+  const sticky = page.getByTestId('sticky-cta');
+  const shown = await sticky.evaluate((el) => el.classList.contains('show'));
+  await page.getByTestId(shown ? 'join-cta' : 'hero-join').click();
   await expect(page.getByRole('heading', { name: 'Join the waitlist' })).toBeVisible();
   await expect(page).toHaveURL(/\?join=1$/);
 }

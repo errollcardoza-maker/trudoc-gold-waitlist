@@ -175,14 +175,11 @@ const roundedPlus = (n: number) => `${Math.floor(n / 10) * 10}+`;
 export const BIOMARKERS_LABEL = roundedPlus(TOTAL_BIOMARKERS);
 export const CORE_BIOMARKERS_LABEL = roundedPlus(CORE_BIOMARKERS);
 
-// Only biomarkers that are actually in the test panel.
-export const chipsA = ['Cholesterol', 'LDL', 'HDL', 'Triglycerides', 'Lipoprotein(a)', 'Glucose', 'HbA1c', 'Uric acid', 'ALT', 'GGT', 'eGFR'];
-export const chipsB = ['TSH', 'Free T4', 'Free T3', 'CRP', 'Haemoglobin', 'Vitamin D', 'Vitamin B12', 'Ferritin', 'Calcium', 'Creatinine', 'Platelets'];
-
-export const heroFeatures = [
-  { icon: '/assets/icons/usp-health-picture.svg', title: 'A clearer picture of your health for the years ahead', desc: `2 full-body health checks covering ${BIOMARKERS_LABEL} biomarkers.` },
-  { icon: '/assets/icons/usp-doctors.svg', title: 'Doctors and specialists for lifelong wellbeing', desc: 'Personalised guidance to support your long-term health.' },
-  { icon: '/assets/icons/usp-spot-risks.svg', title: 'Spot health risks early. Protect your future wellbeing.', desc: 'Track key markers and take proactive steps for your health.' },
+// Hero bullets (handoff prototype). The caller passes HEALTH_RISKS_LABEL so the count matches the risks section.
+export const heroBullets = (risks: string) => [
+  { text: `2 full-body tests a year covering ${BIOMARKERS_LABEL}`, rest: 'biomarkers, without relying on insurance' },
+  { text: 'Doctors & specialists by your side always' },
+  { text: `Spot risks for ${risks} health conditions early` },
 ];
 
 export const heroPrices = [
@@ -190,13 +187,25 @@ export const heroPrices = [
   { label: 'Family of up to 4 adults', price: 'AED 2/day', was: 'AED 4/day' },
 ];
 
+// "How it works": each step's card is a live composition (components/landing/HowItWorks.tsx).
 export const steps = [
-  { img: '/assets/step1-100plus.png', title: `${BIOMARKERS_LABEL} biomarkers, tested at home`, desc: 'One comprehensive test covering key areas like heart, metabolism, hormones, liver, kidney and thyroid' },
-  { img: '/assets/step2-113.png', title: 'Your results, made easy to understand', desc: 'See your biomarkers in a simple, easy-to-read app report, with clear ranges showing what’s healthy and what needs attention' },
-  { img: '/assets/step3-v2.png', title: 'A doctor by your side, always', desc: 'Talk through your results with a doctor who understands you and provides ongoing, personalised guidance whenever you need it' },
-  { img: '/assets/step4.png', title: 'The right specialist when you need one', desc: 'If something needs a closer look, get connected with the right specialist for a more targeted plan' },
-  { img: '/assets/step5.png', title: 'Keep track of your progress', desc: 'Test again to see how your health is changing, and let your doctor refine your plan based on your latest results' },
+  { title: `${BIOMARKERS_LABEL} biomarkers, tested at home`, desc: 'One comprehensive test covering key areas like heart, metabolism, hormones, liver, kidney and thyroid' },
+  { title: 'Your results, made easy to understand', desc: 'See your biomarkers in a simple, easy-to-read app report, with clear ranges showing what’s healthy and what needs attention' },
+  { title: 'A doctor by your side, always', desc: 'Understand your lab results, identify focus areas, and find the right specialist with a doctor’s guidance' },
+  { title: 'The right specialist when you need one', desc: 'If something needs a closer look, get connected with the right specialist for a more targeted plan' },
+  { title: 'Keep track of your progress', desc: 'Test again to see how your health is changing, and let your doctor refine your plan based on your latest results' },
 ];
+
+// "Already insured? Gold is the missing piece" (handoff prototype copy; new section).
+export const puzzle = {
+  titleA: 'Already insured?',
+  titleB: 'Gold is the missing piece',
+  gold: 'TruDoc Gold',
+  goldSub: 'Keeps you well',
+  perks: ['2 preventive checks a year', `${BIOMARKERS_LABEL} biomarkers tested`, 'No diagnosis needed', 'Up to 4 family members'],
+  insurance: 'Your insurance',
+  insuranceSub: 'For when you’re unwell',
+};
 
 // Clinical risks that can be flagged from the test menu; every marker below is on the menu (core or
 // annual). Titles say "risk" where these tests can only flag a condition that needs other evidence to
@@ -231,13 +240,21 @@ export const HEALTH_RISKS_LABEL = `${Math.floor(HEALTH_RISKS_FLAGGED / 10) * 10}
 export const conditionsA = riskCards.slice(0, 4);
 export const conditionsB = riskCards.slice(4);
 
+// Photos and crops from the handoff (components/landing/Doctors.tsx + app/landing.css .lp-doc.<crop>).
 export const doctors = [
-  { name: 'Dr. Imaan Chowdhury', role: 'Specialist, American board certified', img: '/assets/doc-imaan.png', w: 378, h: 398 },
-  { name: 'Dr. Maya El Khouri', role: 'Specialist, American board certified', img: '/assets/doc-maya.png', w: 480, h: 398 },
-  { name: 'Dr. Mehryar Andacheh', role: 'GP certified, DHA licensed', img: '/assets/doc-mehryar.png', w: 398, h: 398 },
-  { name: 'Danya Taha', role: 'Nutritionist, DHA licensed', img: '/assets/doc-2.png', w: 374, h: 398 },
-  { name: 'Dr. Anas Abdul', role: 'GP certified, DoH licensed', img: '/assets/doc-5.png', w: 416, h: 400 },
+  { name: 'Dr. Imaan Chowdhury', role: 'Specialist, American board certified', img: '/assets/lp/doc-imaan.png', crop: 'imaan' },
+  { name: 'Dr. Maya El Khouri', role: 'Specialist, American board certified', img: '/assets/lp/doc-maya.png', crop: 'maya' },
+  { name: 'Dr. Mehryar Andacheh', role: 'GP certified, DHA licensed', img: '/assets/lp/doc-mehryar-card.png', crop: 'mehryar' },
+  { name: 'Danya Taha', role: 'Nutritionist, DHA licensed', img: '/assets/lp/doc-danya.png', crop: 'danya' },
+  { name: 'Dr. Anas Abdul', role: 'GP certified, DoH licensed', img: '/assets/lp/doc-anas.png', crop: 'anas' },
 ];
+
+export const footer = {
+  tagline: ['Health beyond', 'the present'],
+  phone: { href: 'tel:800878362', label: '800 878 362' },
+  email: { href: 'mailto:info@trudocgroup.com', label: 'info@trudocgroup.com' },
+  address: 'Office 701, Bay Square, Building 1, Business Bay, Dubai, UAE',
+};
 
 export const plans = [
   { name: 'Gold Individual', sub: 'For you', amount: 'AED 1', badgeIcon: '/assets/icons/mug-g.svg', badge: 'Less than a cup of karak chai', billed: 'Billed annually at AED 365',

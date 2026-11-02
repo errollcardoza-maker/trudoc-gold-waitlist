@@ -63,7 +63,7 @@ function SummaryCard({ desktop }: { desktop?: boolean }) {
 
 export function Conditions() {
   return (
-    <section data-reveal="section" className="overflow-hidden bg-white px-4 py-12 md:px-(--side) md:py-28">
+    <section className="lp-rv overflow-hidden bg-white px-4 py-12 md:px-(--side) md:py-28">
       <div className="flex flex-col gap-6 md:mx-auto md:max-w-[1280px] md:gap-12">
         <div className="flex flex-col gap-2 md:gap-3">
           <h2 className="m-0 text-2xl leading-[1.25] font-medium tracking-[-0.02em] text-black md:text-[40px] md:leading-[1.15] md:tracking-[-0.025em] md:text-balance md:text-ink">

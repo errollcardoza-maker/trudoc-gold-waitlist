@@ -3,7 +3,7 @@ import { fillValid, withFreshIp, waitPastBotWindow } from './helpers';
 
 test.use({ viewport: { width: 1440, height: 900 }, hasTouch: false });
 
-const cta = (page: Page) => page.getByTestId('join-cta-desktop');
+const cta = (page: Page) => page.getByTestId('hero-join');
 const dialog = (page: Page) => page.getByRole('dialog', { name: 'Join the waitlist' });
 
 async function openModal(page: Page) {
@@ -23,14 +23,20 @@ test.beforeEach(async ({ page }) => {
   await page.goto('/');
 });
 
-test('floating CTA is visible and the mobile CTA is hidden', async ({ page }) => {
+test('hero CTA is on the first screen; the floating bar appears once it scrolls away', async ({ page }) => {
   await expect(cta(page)).toBeInViewport();
-  await expect(page.getByTestId('join-cta')).toBeHidden();
+  await expect(page.getByTestId('sticky-cta')).not.toHaveClass(/show/);
+  await page.evaluate(() => window.scrollTo(0, 1200));
+  await expect(page.getByTestId('sticky-cta')).toHaveClass(/show/);
+  const bar = await page.getByTestId('sticky-cta').boundingBox();
+  expect(Math.abs(bar!.x + bar!.width / 2 - 720)).toBeLessThan(2); // centred
 });
 
 test('modal opens from the CTA (FLIP), keeps the landing mounted, and locks scroll', async ({ page }) => {
   await page.evaluate(() => window.scrollTo(0, 1200));
-  await openModal(page);
+  await expect(page.getByTestId('sticky-cta')).toHaveClass(/show/);
+  await page.getByTestId('join-cta').click();
+  await expect(dialog(page)).toBeVisible();
   const vars = await dialog(page).evaluate((el) => ({
     sx: parseFloat(el.style.getPropertyValue('--sx')),
     anim: el.style.animation,
@@ -120,18 +126,13 @@ test('resizing while open keeps the modal centred', async ({ page }) => {
   expect(Math.abs(box!.x + box!.width / 2 - 550)).toBeLessThan(2);
 });
 
-test('biomarkers: Heart open by default, single-open, sticky heading', async ({ page }) => {
+test('biomarkers and timeline: sticky heading beside the list', async ({ page }) => {
   const list = page.getByTestId('biomarkers');
-  const heart = list.getByRole('button', { name: /^Heart/ });
-  const liver = list.getByRole('button', { name: /^Liver/ });
-  await expect(heart).toHaveAttribute('aria-expanded', 'true');
-  await liver.click();
-  await expect(heart).toHaveAttribute('aria-expanded', 'false');
-  await expect(list.locator('[aria-expanded="true"]')).toHaveCount(1);
-  const pos = await page
-    .getByRole('heading', { name: /We test \d+\+? biomarkers/ })
-    .evaluate((el) => getComputedStyle(el.parentElement!).position);
-  expect(pos).toBe('sticky');
+  await expect(list.locator('[aria-expanded="true"]')).toHaveCount(0);
+  for (const name of [/We test \d+\+? biomarkers/, /How it works/]) {
+    const pos = await page.getByRole('heading', { name }).evaluate((el) => getComputedStyle(el.parentElement!).position);
+    expect(pos).toBe('sticky');
+  }
 });
 
 test('doctors scroller snaps and scrolls with the keyboard', async ({ page }) => {

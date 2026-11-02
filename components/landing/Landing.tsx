@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, type MouseEvent } from 'react';
+import { useEffect, useRef, type MouseEvent } from 'react';
+import type { Plan } from '@/lib/validation';
 import { Biomarkers } from './Biomarkers';
 import { Conditions } from './Conditions';
 import { Doctors } from './Doctors';
@@ -9,61 +10,47 @@ import { Footer } from './Footer';
 import { Hero } from './Hero';
 import { HowItWorks } from './HowItWorks';
 import { Pricing } from './Pricing';
-import { FloatingCta, StickyCta } from './StickyCta';
-import { TopBar } from './TopBar';
+import { Puzzle } from './Puzzle';
+import { StickyCta } from './StickyCta';
 
-/** Plays the intro once per page load. `html.td-intro` is set before paint by the layout script
- *  and removed when the user leaves the landing, so returning from the form shows everything. */
-function useIntroReveal() {
+/** Opens the waitlist form from a button, optionally with a plan preselected (hero price cards). */
+export type JoinHandler = (e: MouseEvent<HTMLButtonElement>, plan?: Plan) => void;
+
+/** Scroll reveals: each element gets `.in` once, the first time 18% of it is in view. The hidden starting
+ *  states only exist under html.td-intro, which the layout script sets before paint (first visit, motion on). */
+function useReveals() {
   useEffect(() => {
-    const root = document.documentElement;
-    if (!root.classList.contains('td-intro')) return;
-    const els = [...document.querySelectorAll<HTMLElement>('[data-reveal]:not([data-shown])')];
-    const show = (el: HTMLElement) => el.setAttribute('data-shown', '');
-    const timers: number[] = [];
-
-    for (const el of els.filter((e) => e.dataset.reveal === 'hero')) {
-      const d = Number(el.dataset.revealDelay || 0);
-      el.style.transitionDelay = `${d}ms`;
-      requestAnimationFrame(() => requestAnimationFrame(() => show(el)));
-      timers.push(window.setTimeout(() => (el.style.transitionDelay = ''), d + 1000));
-    }
-
+    const els = document.querySelectorAll('.lp-rv, .lp-tl-card, .lp-pz, [data-inview]');
     const io = new IntersectionObserver(
       (entries) => {
         for (const en of entries) {
-          if (en.isIntersecting) {
-            show(en.target as HTMLElement);
-            io.unobserve(en.target);
-          }
+          if (!en.isIntersecting) continue;
+          en.target.classList.add('in');
+          io.unobserve(en.target);
         }
       },
-      { rootMargin: '0px 0px -12% 0px', threshold: 0.08 },
+      { threshold: 0.18 },
     );
-    els.filter((e) => e.dataset.reveal === 'section' || e.dataset.reveal === 'glow').forEach((e) => io.observe(e));
-
-    return () => {
-      io.disconnect();
-      timers.forEach(clearTimeout);
-    };
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
   }, []);
 }
 
-export function Landing({ onJoin }: { onJoin: (e: MouseEvent<HTMLButtonElement>) => void }) {
-  useIntroReveal();
+export function Landing({ onJoin }: { onJoin: JoinHandler }) {
+  const heroCta = useRef<HTMLDivElement>(null);
+  useReveals();
   return (
-    <main data-screen-label="01 Landing" className="flex flex-col items-stretch bg-white">
-      <TopBar />
-      <Hero />
+    <main data-screen-label="01 Landing" className="lp">
+      <Hero onJoin={onJoin} ctaRef={heroCta} />
       <HowItWorks />
+      <Puzzle />
       <Biomarkers />
       <Conditions />
       <Doctors />
       <Pricing />
       <Faq />
       <Footer />
-      <StickyCta onJoin={onJoin} />
-      <FloatingCta onJoin={onJoin} />
+      <StickyCta onJoin={onJoin} heroCta={heroCta} />
     </main>
   );
 }

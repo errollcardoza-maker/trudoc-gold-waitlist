@@ -210,8 +210,9 @@ export function WaitlistApp() {
 
   /* ---------- handlers ---------- */
 
-  const onJoin = (e: MouseEvent<HTMLButtonElement>) => {
+  const onJoin = (e: MouseEvent<HTMLButtonElement>, preselect?: Plan) => {
     const btn = e.currentTarget;
+    if (preselect) setPlan(preselect);
     if (isDesktopNow()) {
       if (live.current.modal) return; // ignore double clicks while opening/open
       const r = btn.getBoundingClientRect();

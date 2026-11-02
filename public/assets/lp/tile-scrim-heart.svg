@@ -1,0 +1,10 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="93.0517" height="86" viewBox="0 0 93.0517 86" fill="none" xmlns="http://www.w3.org/2000/svg">
+<ellipse id="Scrim" cx="46.5259" cy="43" rx="46.5259" ry="43" fill="url(#paint0_radial_0_32)"/>
+<defs>
+<radialGradient id="paint0_radial_0_32" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(46.5259 43) scale(46.5259 43)">
+<stop stop-color="#0B0C10" stop-opacity="0.8"/>
+<stop offset="0.45" stop-color="#0B0C10" stop-opacity="0.8"/>
+<stop offset="1" stop-color="#0B0C10" stop-opacity="0"/>
+</radialGradient>
+</defs>
+</svg>

@@ -6,33 +6,42 @@ test.beforeEach(async ({ page }) => {
   await page.goto('/');
 });
 
-test('biomarkers: Heart is open by default and only one area opens at a time', async ({ page }) => {
+test('biomarkers: every area starts closed and several can be open at once', async ({ page }) => {
   const list = page.getByTestId('biomarkers');
   const heart = list.getByRole('button', { name: /^Heart/ });
   const diabetes = list.getByRole('button', { name: /^Diabetes health/ });
 
-  await expect(heart).toHaveAttribute('aria-expanded', 'true');
-  await expect(list.locator('[aria-expanded="true"]')).toHaveCount(1);
-  await expect(list.getByText('Lipoprotein(a)', { exact: true })).toBeVisible();
-
-  await diabetes.click();
-  await expect(diabetes).toHaveAttribute('aria-expanded', 'true');
-  await expect(heart).toHaveAttribute('aria-expanded', 'false');
-  await expect(list.locator('[aria-expanded="true"]')).toHaveCount(1);
-
-  // Tapping the open one closes it, leaving none open.
-  await diabetes.click();
   await expect(list.locator('[aria-expanded="true"]')).toHaveCount(0);
+  await heart.click();
+  await expect(heart).toHaveAttribute('aria-expanded', 'true');
+  await expect(list.getByText('Lipoprotein(a)', { exact: true })).toBeVisible();
+  await diabetes.click();
+  await expect(list.locator('[aria-expanded="true"]')).toHaveCount(2);
+
+  await diabetes.click();
+  await expect(diabetes).toHaveAttribute('aria-expanded', 'false');
+  await expect(heart).toHaveAttribute('aria-expanded', 'true');
 
   // Keyboard: Enter and Space toggle.
   await heart.focus();
   await page.keyboard.press('Enter');
-  await expect(heart).toHaveAttribute('aria-expanded', 'true');
-  await page.keyboard.press('Space');
   await expect(heart).toHaveAttribute('aria-expanded', 'false');
+  await page.keyboard.press('Space');
+  await expect(heart).toHaveAttribute('aria-expanded', 'true');
 });
 
-test('FAQ: "What happens if my health check-up results show a potential risk?" is open by default; one open at a time', async ({ page }) => {
+test('opening a biomarker area after it has scrolled in keeps it visible (reveal class survives re-render)', async ({ page }) => {
+  const heart = page.getByTestId('biomarkers').getByRole('button', { name: /^Heart/ });
+  await heart.scrollIntoViewIfNeeded();
+  const item = page.locator('.lp-acc-item').nth(1);
+  await expect(item).toHaveClass(/\bin\b/);
+  await heart.click();
+  await expect(item).toHaveClass(/\bin\b/);
+  await expect.poll(() => item.evaluate((el) => getComputedStyle(el).opacity)).toBe('1');
+  await expect(page.locator('#area-panel-heart').getByText('Lipoprotein(a)', { exact: true })).toBeVisible();
+});
+
+test('FAQ: "What happens if my health check-up results show a potential risk?" is open by default; items toggle independently', async ({ page }) => {
   const faq = page.getByTestId('faq');
   const q3 = faq.getByRole('button', { name: 'What happens if my health check-up results show a potential risk?' });
   const q0 = faq.getByRole('button', { name: 'How is TruDoc Gold different from health insurance?' });
@@ -42,16 +51,30 @@ test('FAQ: "What happens if my health check-up results show a potential risk?" i
 
   await q0.click();
   await expect(q0).toHaveAttribute('aria-expanded', 'true');
-  await expect(q3).toHaveAttribute('aria-expanded', 'false');
-
-  // Tapping the answer text (not just the question) also toggles, as in the prototype.
-  await faq.getByText(/^Health insurance often covers tests/).click();
-  await expect(faq.locator('button[aria-expanded="true"]')).toHaveCount(0);
+  await expect(q3).toHaveAttribute('aria-expanded', 'true');
+  await q3.click();
+  await expect(faq.locator('button[aria-expanded="true"]')).toHaveCount(1);
 });
 
-test('sticky CTA is visible from first paint', async ({ page }) => {
+test('sticky CTA is hidden on the first screen and slides in once the hero buttons scroll away', async ({ page }) => {
+  await expect(page.getByTestId('hero-join')).toBeInViewport();
+  await expect(page.getByTestId('sticky-cta')).not.toHaveClass(/show/);
+  await page.evaluate(() => window.scrollTo(0, 1600));
+  await expect(page.getByTestId('sticky-cta')).toHaveClass(/show/);
   await expect(page.getByTestId('join-cta')).toBeInViewport();
-  await expect(page.getByText('From AED 1/day').filter({ visible: true })).toHaveCount(1);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await expect(page.getByTestId('sticky-cta')).not.toHaveClass(/show/);
+});
+
+test('hero price cards open the form with that plan preselected', async ({ page }) => {
+  await page.getByTestId('price-family').click();
+  await expect(page.getByRole('heading', { name: 'Join the waitlist' })).toBeVisible();
+  await expect(page.getByRole('radio', { name: /^Family/ })).toHaveAttribute('aria-checked', 'true');
+});
+
+test('"View included tests" scrolls the biomarker section to 56px from the top', async ({ page }) => {
+  await page.getByRole('button', { name: 'View included tests' }).click();
+  await expect.poll(async () => Math.round(await page.getByTestId('biomarkers').evaluate((el) => el.closest('section')!.getBoundingClientRect().top))).toBe(56);
 });
 
 test('captures UTM params into sessionStorage', async ({ page }) => {
@@ -84,10 +107,14 @@ test.describe('mobile layout snapshot', () => {
   });
 });
 
-test('Oct 12 change set: copy, phone, removed items', async ({ page }) => {
-  // Hero feature #2, How it works step 2, conditions and doctors copy
-  await expect(page.getByText('Doctors and specialists for lifelong wellbeing', { exact: true }).first()).toBeAttached();
+test('copy: hero, steps, puzzle, risks, doctors, footer', async ({ page }) => {
+  // Hero bullets (handoff prototype); the risk count matches the risks section
+  await expect(page.getByText(/^2 full-body tests a year covering 100\+/)).toBeAttached();
+  await expect(page.getByText('Doctors & specialists by your side always', { exact: true })).toBeAttached();
+  await expect(page.getByText('Spot risks for 80+ health conditions early', { exact: true })).toBeAttached();
   await expect(page.getByText('A doctor by your side, always', { exact: true })).toBeAttached();
+  await expect(page.getByText('Understand your lab results, identify focus areas, and find the right specialist with a doctor’s guidance')).toBeAttached();
+  await expect(page.getByTestId('puzzle').getByText('No diagnosis needed')).toBeAttached();
   for (const t of ['Cardiovascular risk', 'Iron-deficiency anaemia', 'Vitamin D deficiency']) await expect(page.getByText(t, { exact: true }).first()).toBeAttached();
   const scroller = page.getByTestId('conditions-scroller');
   await expect(scroller.getByText(/^Tracked through/)).toHaveCount(8);
@@ -95,21 +122,13 @@ test('Oct 12 change set: copy, phone, removed items', async ({ page }) => {
   await expect(scroller.getByText('Tracked through TSH, Free T4 and Free T3', { exact: true })).toBeAttached();
   // No risk card names a test that isn't on the v4 menu
   await expect(scroller.getByText(/ApoB|insulin|HOMA|uACR|testosterone|folate|hs-/)).toHaveCount(0);
-  await expect(page.getByText('4.5 Rating').first()).toBeAttached();
+  await expect(page.locator('[data-count="4.5"]')).toBeAttached(); // Google rating (counts up when in view)
   await expect(page.getByText('GP certified, DoH licensed')).toBeAttached();
   await expect(page.getByText('Personalised guidance for your health needs')).toBeAttached();
-  // Footer toll-free number
+  await expect(page.getByText('Health beyond')).toBeAttached();
   await expect(page.locator('a[href="tel:800878362"]').first()).toHaveText('800 878 362');
-  // Removed: experience lines, payment providers, the person image, non-tested chips
   await expect(page.getByText(/years of experience/)).toHaveCount(0);
   await expect(page.getByText('Split your payment with')).toHaveCount(0);
-  await expect(page.locator('img[src*="human.png"], img[src*="tabby"], img[src*="tamara"]')).toHaveCount(0);
-  await expect(page.getByText('Blood Pressure')).toHaveCount(0);
-  // Hero chips name tested markers only (v4)
-  const hero = page.locator('section').filter({ has: page.getByRole('heading', { name: 'Make proactive healthcare simple.' }) });
-  for (const gone of ['ApoB', 'Insulin', 'Testosterone', 'Cortisol', 'Homocysteine', 'Magnesium']) await expect(hero.getByText(gone, { exact: true })).toHaveCount(0);
-  // New hero art
-  await expect(page.locator('img[src*="test-tube.png"]').first()).toBeAttached();
 });
 
 test('FAQ answers render **bold** phrases as bold text, with no stray asterisks', async ({ page }) => {
