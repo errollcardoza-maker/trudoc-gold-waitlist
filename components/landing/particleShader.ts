@@ -1,5 +1,6 @@
 // Biological age / heart particle shader, ported unchanged from the handoff prototype (reference/source/js/particles.js).
-// Do not retune constants here; layout is set by the caller (pxScale, canvas box).
+// Do not retune constants here; layout is set by the caller (pxScale, canvas box). Only change: the output is
+// premultiplied (colour × alpha) so mobile Safari composites it correctly.
 export const PARTICLE_FRAG = `
 precision highp float;
 uniform vec2 uRes;uniform float uTime;uniform float uBeat;uniform float uZoom;uniform float uReveal;uniform float uTint;uniform float uPx;uniform sampler2D uDens;uniform sampler2D uHeart;uniform float uGray;
@@ -95,5 +96,5 @@ void main(){
  col+=(hash(gl_FragCoord.xy+fract(t))-.5)/255.;
  float gL=dot(col,vec3(.299,.587,.114));
  col=mix(col,vec3(gL)*vec3(.9,.93,1.)*1.12,uGray);   // unlit (unknown score): cool grey stipple
- gl_FragColor=vec4(clamp(col,0.,1.),A);
+ gl_FragColor=vec4(clamp(col,0.,1.)*A,A);   // premultiplied: Safari shows straight-alpha canvases as opaque
 }`;

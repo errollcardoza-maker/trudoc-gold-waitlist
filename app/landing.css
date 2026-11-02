@@ -348,10 +348,10 @@ html.td-intro .lp-pz.in .pz-ins { animation: lpNudge .5s var(--ease-out) .85s bo
 .lp-end { position: relative; height: 560px; overflow: hidden; isolation: isolate;
   background: radial-gradient(ellipse 120% 220px at 50% 100%, #1a0506 30%, rgba(26,5,6,0) 100%),
     linear-gradient(180deg, #f7f7f7 0, #f7f7f7 18%, #fbf3dc 42%, #f3dfa0 56%, #e2b45c 66%, #9a5a24 78%, #3a120a 90%, #1a0506 100%); }
-.lp-end-art { position: absolute; left: calc(-158px + (100% - 375px) / 2); top: 72px; width: 502px; height: 282.5px; mix-blend-mode: multiply; }
+.lp-end-art { position: absolute; left: calc(-158px + (100% - 375px) / 2); top: 72px; width: 502px; height: 282.5px; }
 /* The art is light-on-black: inverted to neutral ink on white, which multiply drops onto the light ground. */
-.lp-end-art img { filter: invert(1) grayscale(1); }
-.lp-end-art canvas.still { filter: invert(1) grayscale(1) sepia(.6); }
+/* footer-figures-ink.webp: dark-ink art on transparency, baked so no blend modes or filters are needed
+   (iPhone Safari draws those as a bright box). */
 .lp-end-art img, .lp-end-art canvas { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; }
 .lp-end-art img { -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 62%, transparent 100%); mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 62%, transparent 100%); transition: opacity .6s ease; }
 .lp-end-art canvas { opacity: 0; transition: opacity .6s ease; }

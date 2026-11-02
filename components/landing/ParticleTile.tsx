@@ -27,7 +27,7 @@ export function ParticleTile({ kind }: { kind: 'body' | 'heart' }) {
     const canvas = document.createElement('canvas');
     canvas.style.cssText = 'display:block;width:100%;height:100%;';
     box.appendChild(canvas);
-    const gl = canvas.getContext('webgl', { antialias: true, premultipliedAlpha: false });
+    const gl = canvas.getContext('webgl', { antialias: true, premultipliedAlpha: true, alpha: true });
     if (!gl) {
       canvas.remove();
       return;

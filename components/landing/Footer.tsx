@@ -45,7 +45,7 @@ void main(){
   float lum=mix(up,side,g);
   float glow=smoothstep(.04,.8,dens(P))*.12*smoothstep(.45,1.,am);
   float la=clamp(lum*1.8,0.,1.),A=clamp(la+glow,0.,1.);
-  gl_FragColor=vec4(vec3(.36,.2,.08),A);}`;
+  gl_FragColor=vec4(vec3(.36,.2,.08)*A,A);}`;
 
 /** Live particle version of the footer art: the translucent figure stays the original image; the particle
  *  figure and ground are re-drawn as drifting, twinkling specks that swirl in the first time the footer shows.
@@ -55,7 +55,7 @@ function useFooterParticles(box: React.RefObject<HTMLDivElement | null>) {
     const el = box.current;
     if (!el || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const img = el.querySelector('img')!, cv = el.querySelector<HTMLCanvasElement>('canvas.cv')!, still = el.querySelector<HTMLCanvasElement>('canvas.still')!;
-    const gl = cv.getContext('webgl', { premultipliedAlpha: false, antialias: false, alpha: true });
+    const gl = cv.getContext('webgl', { premultipliedAlpha: true, antialias: false, alpha: true });
     if (!gl) return;
     const sh = (type: number, src: string) => {
       const x = gl.createShader(type)!;
@@ -113,7 +113,7 @@ function useFooterParticles(box: React.RefObject<HTMLDivElement | null>) {
         for (let x = 0; x < dw; x++) {
           const i = (y * dw + x) * 4, u = x / dw, v = y / dh;
           const edge = Math.min(1, u / 0.12, (1 - u) / 0.2, v / 0.1, (1 - v) / 0.16);
-          const L = ((px[i] + px[i + 1] + px[i + 2]) / 3) * (1 - stillMask(u, v)) * Math.max(0, edge);
+          const L = px[i + 3] * (1 - stillMask(u, v)) * Math.max(0, edge); // the ink art's opacity is its brightness
           px[i] = px[i + 1] = px[i + 2] = L;
         }
       dx.putImageData(dd, 0, 0);
@@ -127,7 +127,7 @@ function useFooterParticles(box: React.RefObject<HTMLDivElement | null>) {
       gl.uniform2f(U('R'), cv.width, cv.height);
       gl.uniform2f(U('B'), W, H);
       gl.uniform1f(U('S'), k);
-      // Translucent figure: the original pixels, cut out with a soft edge, drawn once
+      // Translucent figure: the art's own pixels, cut out with a soft edge, drawn once
       still.width = Math.round(W * 2);
       still.height = Math.round(H * 2);
       const sx = still.getContext('2d', { willReadFrequently: true })!;
@@ -136,10 +136,9 @@ function useFooterParticles(box: React.RefObject<HTMLDivElement | null>) {
       for (let y = 0; y < still.height; y++)
         for (let x = 0; x < still.width; x++) {
           const i = (y * still.width + x) * 4, m = stillMask(x / still.width, y / still.height);
-          // Opaque only where the figure itself is lit: the black ground around it (and everything outside the
-          // cut-out) is transparent, so the inverted, tinted layer can't show up as a box on the light footer.
-          const L = (sp[i] + sp[i + 1] + sp[i + 2]) / 765, lit = Math.min(1, Math.max(0, (L - 0.16) / 0.3)); // drops the soft halo around the figure too
-          sp[i + 3] = Math.round(255 * m * lit);
+          // Keep only the figure itself: its soft halo and everything outside the cut-out become transparent.
+          const a = sp[i + 3] / 255, lit = Math.min(1, Math.max(0, (a - 0.16) / 0.3));
+          sp[i + 3] = Math.round(255 * a * m * lit);
         }
       sx.putImageData(sd, 0, 0);
       ready = true;
@@ -186,7 +185,7 @@ export function Footer() {
     <footer>
       <div className="lp-end" ref={end}>
         <div className="lp-end-art" ref={art} aria-hidden="true">
-          <img src="/assets/lp/footer-figures.webp" alt="" width={1672} height={941} loading="lazy" decoding="async" />
+          <img src="/assets/lp/footer-figures-ink.webp" alt="" width={1672} height={941} loading="lazy" decoding="async" />
           <canvas className="still" />
           <canvas className="cv" />
         </div>
