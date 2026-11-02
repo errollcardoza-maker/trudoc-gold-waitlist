@@ -360,12 +360,18 @@ html.td-intro .lp-pz.in .pz-ins { animation: lpNudge .5s var(--ease-out) .85s bo
 .lp-end-tag { position: absolute; left: calc(204px + (100% - 375px) / 2); top: 142px; width: 160px; font-family: var(--font-instrument), 'Times New Roman', serif; font-weight: 400; font-size: 30px; line-height: 1.08; color: var(--lp-primary);
   transition: opacity .9s var(--ease-out) .15s, transform .9s var(--ease-out) .15s; }
 html.td-intro .lp-end:not(.show) .lp-end-tag { opacity: 0; transform: translateY(10px); }
-.lp-contact { background: #1a0506; padding: 8px 16px calc(140px + env(safe-area-inset-bottom)); }
+.lp-contact { background: #1a0506; margin-top: -1px; padding: 8px 16px calc(140px + env(safe-area-inset-bottom)); }
 .lp-contact .lp-wrap { display: flex; flex-direction: column; gap: 12px; }
 .lp-contact .h { font-size: 14px; font-weight: 600; line-height: 1.4; color: #fff; }
 .lp-contact .rows { display: flex; flex-direction: column; gap: 8px; font-size: 14px; line-height: 1.4; color: rgba(255,255,255,.7); }
 .lp-contact a { color: rgba(255,255,255,.7); }
 .lp-contact a:hover { color: #fff; }
+
+/* Whatever shows past the end of the page (iOS Safari's floating toolbar, overscroll) matches the footer
+   instead of the white page background. (481–767px keeps its grey side gutters.) */
+@media (max-width: 480px), (min-width: 768px) {
+  html:has(main.lp), html:has(main.lp) body { background: #1a0506; }
+}
 
 /* ───────── Reduced motion: final states, nothing moving ───────── */
 @media (prefers-reduced-motion: reduce) {
